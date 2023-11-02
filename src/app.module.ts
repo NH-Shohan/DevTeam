@@ -5,6 +5,7 @@ import { Module } from '@nestjs/common';
 // import { AdminController } from './Admin/admin.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminModule } from './Admin/admin.module';
+import { ProgrammerModule } from './programmer/programmer.module';
 // import { RecruiterModule } from './Recruiter/recruiter.module';
 
 @Module({
@@ -20,6 +21,7 @@ import { AdminModule } from './Admin/admin.module';
       synchronize: true,
     }),
     AdminModule,
+    ProgrammerModule,
     // RecruiterModule,
   ],
   // controllers: [AppController, RecruiterController],
