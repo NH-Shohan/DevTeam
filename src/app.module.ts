@@ -6,6 +6,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminModule } from './Admin/admin.module';
 import { ProgrammerModule } from './programmer/programmer.module';
+import { CompanyModule } from './company/company.module';
 // import { RecruiterModule } from './Recruiter/recruiter.module';
 
 @Module({
@@ -22,6 +23,7 @@ import { ProgrammerModule } from './programmer/programmer.module';
     }),
     AdminModule,
     ProgrammerModule,
+    CompanyModule
     // RecruiterModule,
   ],
   // controllers: [AppController, RecruiterController],
