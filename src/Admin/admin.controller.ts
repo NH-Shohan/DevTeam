@@ -24,6 +24,8 @@ const recruiters = [];
 const companies = [];
 const users = [];
 
+// Admin Controller
+
 @Controller('admin')
 export class AdminController {
   constructor(private readonly appService: AdminEntityService) {}
