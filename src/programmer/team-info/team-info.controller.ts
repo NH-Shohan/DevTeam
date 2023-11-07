@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   Patch,
   Post,
@@ -8,14 +9,12 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 
-@Controller()
+@Controller('programmer')
 export class TeamInfoController {
   //   Team Post Request
   @Post('team')
   @UsePipes(new ValidationPipe())
-  createTeam() {
-    return 'Hello Team';
-  }
+  createTeam() {}
 
   //   Get All Teams Information
   @Get('team')
@@ -35,10 +34,10 @@ export class TeamInfoController {
   //   Update Team Name
   @Patch('team/:teamId')
   @UsePipes(new ValidationPipe())
-  UpdateTeamName() {}
+  updateTeamName() {}
 
   //   Delete Team
-  @Patch('team/:teamId')
+  @Delete('team/:teamId')
   @UsePipes(new ValidationPipe())
-  DeleteTeam() {}
+  deleteTeam() {}
 }
