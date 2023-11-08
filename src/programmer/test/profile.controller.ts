@@ -21,14 +21,15 @@ import { ProfileService } from './profile.service';
 import { UpdatePasswordDTO } from './update-password.dto';
 
 @Controller('programmer/profile')
-export class ProfileController {
+export class ProfileControllerTest {
   constructor(private profileService: ProfileService) {}
 
   // Post on Database
   @Post('createProfile')
   @UsePipes(new ValidationPipe())
   createProfile(@Body() profileInfo: ValidateProgrammerProfile) {
-    return this.profileService.createUser(profileInfo);
+    // return this.profileService.createUser(profileInfo);
+    return profileInfo;
   }
 
   // Get all profile Infromation

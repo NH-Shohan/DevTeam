@@ -1,4 +1,6 @@
+import { Type } from 'class-transformer';
 import {
+  IsDate,
   IsEmail,
   IsLowercase,
   IsString,
@@ -20,6 +22,10 @@ export class ValidateProgrammerProfile {
   @IsEmail()
   @IsLowercase()
   email: string;
+
+  @IsDate()
+  @Type(() => Date)
+  createdDate: Date;
 
   @Length(2, 30, {
     message: 'Leanth can not be less than 2 and more than 30 character.',
