@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminModule } from './Admin/admin.module';
 import { CompanyModule } from './company/company.module';
 import { ProgrammerModule } from './programmer/programmer.module';
+import { RecruiterModule } from './Recruiter/recruiter.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ProgrammerModule } from './programmer/programmer.module';
       synchronize: true,
     }),
     AdminModule,
+    RecruiterModule,
     ProgrammerModule,
     CompanyModule,
   ],
