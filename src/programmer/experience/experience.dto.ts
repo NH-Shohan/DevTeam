@@ -2,6 +2,8 @@ import { Type } from 'class-transformer';
 import { IsDate, IsString, MaxLength } from 'class-validator';
 
 export class ExperienceDTO {
+  id: number;
+
   @IsString()
   @MaxLength(100)
   jobTitle: string;
