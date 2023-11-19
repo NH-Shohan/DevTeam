@@ -22,4 +22,6 @@ export class ValidateRecruiterProfile {
       'Password must be minimum 8 characters, at least one letter, one number and one special character',
   })
   password: string;
+  
+  image:string;
 }

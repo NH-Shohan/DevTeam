@@ -27,7 +27,75 @@ const candidates = [];
 
 @Controller('recruiter')
 export class RecruiterController {
-  constructor(private readonly appService: RecruiterEntityService) {}
+  constructor(private readonly appService: RecruiterEntityService) { }
+
+  @Get("get-recruiters")
+  getViewRecruiter(): any {
+    return this.appService.getAllRecruiterEntitys();
+  }
+
+  @Post('create-recruiter')
+  @UsePipes(new ValidationPipe())
+  @UseInterceptors(
+    FileInterceptor('image', {
+      fileFilter: (req, file, cb) => {
+        if (file.originalname.match(/^.*\.(jpg|png|jpeg)$/)) cb(null, true);
+        else {
+          cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
+        }
+      },
+ 
+      limits: { fileSize: 6000000 },
+ 
+      storage: diskStorage({
+        destination: './uploads',
+ 
+        filename: function (req, file, cb) {
+          cb(null, Date.now() + file.originalname);
+        },
+      }),
+    }),
+  )
+  createRecruiter(
+    @Body() profile: ValidateRecruiterProfile,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    // You can now use both 'profile' and 'file' to create the admin entity
+    const fileName = file.filename;
+    const result = { ...profile, image: fileName };
+ 
+    return this.appService.createRecruiterEntity(result);
+  }
+
+  
+  @Get("get-recruiter/:email")
+  getMyProfile(): any {
+    return this.appService.getAllRecruiterEntitys();
+  }
+
+  // Update profile on Database
+
+  @Put('update-recruiter/:id')
+  @UsePipes(new ValidationPipe())
+  updateProfile(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatedProfile: ValidateRecruiterProfile,
+  ) {
+
+    return this.appService.updateRecruiterEntity(id, updatedProfile);
+
+  }
+
+
+  //   get image
+
+  @Get('/get-recruiter-image/:name')
+  getImages(@Param('name') name, @Res() res) {
+    res.sendFile(name, { root: './recruiter-uploads' });
+  }
+
+  
+ //interview list
   @Get('interview-list')
   getInterviewList(): any {
     return {
@@ -35,48 +103,9 @@ export class RecruiterController {
       data: interviews,
     };
   }
-
-  @Get('company-requests')
-  getCompanyRequests(): any {
-    return {
-      message: 'Company requests retrieved successfully',
-      data: jobRequests,
-    };
-  }
-
-  @Get('candidates')
-  getCandidates(): any {
-    return { message: 'Candidates retrieved successfully', data: candidates };
-  }
-
-  @Get('candidate-requests')
-  getCandidateRequestsForJob(): any {
-    return {
-      message: 'Candidate requests retrieved successfully',
-      data: {},
-    };
-  }
-
-  @Post('approve-candidates')
-  approveCandidatesForJob(@Body() body): any {
-    return { message: 'Candidates approved successfully' };
-  }
-
-  @Post('reject-candidates')
-  rejectCandidates(@Body() body): any {
-    return { message: 'Candidates rejected successfully' };
-  }
-
-  @Post('recruit-team')
-  recruitTeam(@Body() body): any {
-    return { message: 'Team members recruited successfully' };
-  }
-
-  @Post('interview-team')
-  interviewTeam(@Body() body): any {
-    return { message: 'Team members interviewed successfully' };
-  }
-
+  
+  
+  //set interview
   @Post('set-interview')
   setInterview(@Body() body): any {
     const returnVariable = {
@@ -86,26 +115,7 @@ export class RecruiterController {
     return returnVariable;
   }
 
-  @Post('approve-interview-request')
-  approveInterviewRequest(@Body() body): any {
-    return { message: 'Interview requests approved successfully', data: body };
-  }
-
-  @Get('messages-from-candidates')
-  getMessagesFromCandidates(): any {
-    return {
-      message: 'Messages from candidates retrieved successfully',
-      data: {},
-    };
-  }
-
-  @Get('messages-from-companies')
-  getMessagesFromCompanies(): any {
-    return {
-      message: 'Messages from companies retrieved successfully',
-      data: {},
-    };
-  }
+  //update interview
 
   @Put('update-interview/:interviewId')
   updateInterview(
@@ -120,6 +130,31 @@ export class RecruiterController {
     };
   }
 
+  //delete interview
+  @Delete('delete-interview/:developerEmail')
+  deleteInterview(@Param('developerEmail') developerEmail:string):any{
+    return{
+      message:'interview deleted successfully',
+      data:'deletedInterview'
+    }
+
+  }
+
+  //view interviewteam
+  @Post('interview-team')
+  interviewTeam(@Body() body): any {
+    return { message: 'Team members interviewed successfully' };
+  }
+
+  @Get('company-requests')
+  getCompanyRequests(): any {
+    return {
+      message: 'Company requests retrieved successfully',
+      data: jobRequests,
+    };
+  }
+
+  // update candidate status
   @Patch('update-candidate/:candidateId')
   updateCandidate(
     @Param('candidateId') candidateId: string,
@@ -133,29 +168,80 @@ export class RecruiterController {
     };
   }
 
-  @Delete('delete-candidate/:candidateId')
-  deleteCandidate(@Param('candidateId') candidateId: string): any {
-    // Find the candidate by ID in the 'candidates' array
-    // const candidateIndex = candidates.findIndex(
-    //   (candidate) => candidate.id === candidateId,
-    // );
+  //remove candidate
+  
+  @Delete('delete-candidate/:id')
+  deleteProfile(@Param('id', ParseIntPipe) id: number) {
+    this.appService.deleteRecruiterEntity(id);
+    return "success";
+  }
+  //see all candidates
+  @Get('show-candidates')
+  getCandidates(): any {
+    return { message: 'Candidates retrieved successfully', data: candidates };
+  }
 
-    // if (candidateIndex !== -1) {
-    //   // If found, remove the candidate from the array
-    //   const deletedCandidate = candidates.splice(candidateIndex, 1)[0];
-    //   return {
-    //     message: 'Candidate deleted successfully',
-    //     data: deletedCandidate,
-    //   };
-    // } else {
-    //   return { message: 'Candidate not found' };
-    // }
+  // @Get('candidate-requests')
+  // getCandidateRequestsForJob(): any {
+  //   return {
+  //     message: 'Candidate requests retrieved successfully',
+  //     data: {},
+  //   };
+  // }
 
+  
+   
+  //Approve Candidate
+  @Post('approve-candidates')
+  approveCandidatesForJob(@Body() body): any {
+    return { message: 'Candidates approved successfully' };
+  }
+  //Reject Candidate
+  @Post('reject-candidates')
+  rejectCandidates(@Body() body): any {
+    return { message: 'Candidates rejected successfully' };
+  }
+
+ //approve company request
+  @Post('approve-interview-request')
+  approveInterviewRequest(@Body() body): any {
+    return { message: 'Interview requests approved successfully', data: body };
+  }
+
+  //Reject company request
+  @Post('reject-company-request')
+  rejectCompanyRequest(@Body() body): any {
+    return { message: 'Candidates rejected successfully' };
+  }
+
+  //Full Recruiter team
+  @Post('recruit-team')
+  recruitTeam(@Body() body): any {
+    return { message: 'Team members recruited successfully' };
+  }
+
+  //View message from Candidate
+  @Get('messages-from-candidates')
+  getMessagesFromCandidates(): any {
     return {
-      message: 'Candidate deleted successfully',
-      data: 'deletedCandidate',
+      message: 'Messages from candidates retrieved successfully',
+      data: {},
     };
   }
+
+  //View message from companies
+  @Get('messages-from-companies')
+  getMessagesFromCompanies(): any {
+    return {
+      message: 'Messages from companies retrieved successfully',
+      data: {},
+    };
+  }
+
+  
+   
+
+  
 
   //   Lab-2
 
@@ -165,72 +251,18 @@ export class RecruiterController {
   // }
 
   //   file upload
-  @Post('recruiter-upload')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      fileFilter: (req, file, cb) => {
-        if (file.originalname.match(/^.*\.(jpg|png|jpeg)$/)) {
-          cb(null, true);
-        } else {
-          cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
-        }
-      },
-
-      limits: { fileSize: 5000000 },
-
-      storage: diskStorage({
-        destination: './recruiter-uploads',
-
-        filename: function (req, file, cb) {
-          cb(null, Date.now() + 'rokeya' + file.originalname);
-        },
-      }),
-    }),
-  )
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    return { msg: 'success', file: file };
-  }
-
-  //   get image
-
-  @Get('/get-recruiter-image/:name')
-  getImages(@Param('name') name, @Res() res) {
-    res.sendFile(name, { root: './recruiter-uploads' });
-  }
+  
 
 
 
-  // creates
-  @Post('create-recruiter')
-  @UsePipes(new ValidationPipe())
-  createRecruiter(@Body() profile: ValidateRecruiterProfile) {
-    return this.appService.createRecruiterEntity(profile);
-  }
+  
 
-  // Delete Recruiter
+  // Delete candidate
 
-  @Delete('delete-recruiter/:id')
-  deleteProfile(@Param('id', ParseIntPipe) id: number) {
-    this.appService.deleteRecruiterEntity(id);
-    return "success";
-    }
+  
 
-  @Get("Show-recruiter")
-  getViewRecruiter():any{
-    return this.appService.getAllRecruiterEntitys();
-    }
 
-    // Update profile on Database
 
-  @Put('update-recruiter/:id')
-  @UsePipes(new ValidationPipe())
-  updateProfile(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updatedProfile: ValidateRecruiterProfile,
-  ) {
-
-    return this.appService.updateRecruiterEntity(id, updatedProfile);
-
-  }
+  
 
 }

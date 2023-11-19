@@ -11,4 +11,7 @@ export class RecruiterEntity {
   email: string;
   @Column()
   password: string;
+  @Column()
+  image: string;
+  
 }
