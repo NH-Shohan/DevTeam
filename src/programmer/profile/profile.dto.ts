@@ -3,7 +3,6 @@ import {
   IsEmail,
   IsLowercase,
   IsNotEmpty,
-  IsNumber,
   IsString,
   IsUrl,
   Length,
@@ -38,7 +37,6 @@ export class ProfileDTO {
   @IsLowercase()
   gitHubUsername: string;
 
-  @IsNotEmpty()
   profilePicture: string;
 
   @IsNotEmpty()
@@ -67,6 +65,5 @@ export class ProfileDTO {
   projects: string;
 
   @IsNotEmpty()
-  @IsNumber()
   experiences: number;
 }

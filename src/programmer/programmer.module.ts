@@ -5,7 +5,6 @@ import { ProfileModule } from './profile/profile.module';
 import { ProjectModule } from './project/project.module';
 import { SearchModule } from './search/search.module';
 import { TeamInfoModule } from './team-info/team-info.module';
-import { ProgrammerProfileModule } from './test/profile.module';
 
 @Module({
   imports: [
@@ -15,7 +14,6 @@ import { ProgrammerProfileModule } from './test/profile.module';
     ProfileModule,
     CertificationsModule,
     SearchModule,
-    ProgrammerProfileModule,
   ],
 })
 export class ProgrammerModule {}

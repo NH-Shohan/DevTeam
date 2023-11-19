@@ -49,7 +49,7 @@ export class ProfileService {
     return this.programmerProfileRepository.findOneBy({ id: id });
   }
 
-  // Update a profile
+  // Update password
   async updateProfilePassword(
     id: number,
     updatePasswordDTO: UpdatePasswordDTO,
