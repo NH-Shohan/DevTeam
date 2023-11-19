@@ -14,6 +14,8 @@ import {
   UseInterceptors,
   UploadedFile,
   Res,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
@@ -29,7 +31,115 @@ const users = [];
 
 @Controller('admin')
 export class AdminController {
-  constructor(private readonly appService: AdminEntityService) {}
+  constructor(private appService: AdminEntityService) {}
+
+  // Read all Admin
+  @Get('get-admins')
+  getAdmin() {
+    return this.appService.getAllAdminEntitys();
+  }
+
+  //   Create Admin
+  @Post('create-admin')
+  @UsePipes(new ValidationPipe())
+  @UseInterceptors(
+    FileInterceptor('imageName', {
+      fileFilter: (req, file, cb) => {
+        if (file.originalname.match(/^.*\.(jpg|png|jpeg)$/)) cb(null, true);
+        else {
+          cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
+        }
+      },
+
+      limits: { fileSize: 6000000 },
+
+      storage: diskStorage({
+        destination: './uploads',
+
+        filename: function (req, file, cb) {
+          cb(null, Date.now() + file.originalname);
+        },
+      }),
+    }),
+  )
+  createAdmin(
+    @Body() profile: ValidateAdminProfile,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    // You can now use both 'profile' and 'file' to create the admin entity
+    const fileName = file ? file.filename : null;
+    const result = { ...profile, imageName: fileName };
+
+    return this.appService.createAdminEntity(result);
+  }
+
+  // Read own admin
+  @Get('me/:email')
+  getUser(@Param('email') email: string) {
+    return this.appService.getAdminEntityById(email);
+  }
+
+  // Update Admin full profile
+  @Put('update-admin/:id')
+  @UsePipes(new ValidationPipe())
+  updateProfile(
+    @Param('id', ParseIntPipe) id: number,
+
+    @Body() profileInfo: ValidateAdminProfile,
+  ) {
+    const updated = this.appService.updateAdminEntity(id, profileInfo);
+    return {
+      updated,
+      msg: 'Successfully updated',
+    };
+  }
+
+  // Upload Admin Photo
+  @Post('upload-admin-photo')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      fileFilter: (req, file, cb) => {
+        if (file.originalname.match(/^.*\.(jpg|png|jpeg)$/)) cb(null, true);
+        else {
+          cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
+        }
+      },
+
+      limits: { fileSize: 6000000 },
+
+      storage: diskStorage({
+        destination: './uploads',
+
+        filename: function (req, file, cb) {
+          cb(null, Date.now() + file.originalname);
+        },
+      }),
+    }),
+  )
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    return file;
+  }
+
+  // View Profile photo
+  @Get('/get-admin-image/:email')
+  async getProfilePicture(@Param('email') email, @Res() res) {
+    try {
+      const profile = await this.appService.getAdminEntityById(email);
+      res.sendFile(profile.imageName, {
+        root: './uploads',
+      });
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  // Show all Recruiters
   @Get('recruiters')
   getRecruiters(): any {
     return { message: 'Recruiters retrieved successfully', data: recruiters };
@@ -45,9 +155,9 @@ export class AdminController {
     return { message: 'Recruiters rejected successfully' };
   }
 
-  @Post('reject-companies')
-  rejectCompanies(@Body() body): any {
-    return { message: 'Companies rejected successfully' };
+  @Get('companies')
+  getCompanies(): any {
+    return { message: 'Companies retrieved successfully', data: companies };
   }
 
   @Post('approve-companies')
@@ -55,17 +165,26 @@ export class AdminController {
     return { message: 'Companies approved successfully' };
   }
 
-  @Get('companies')
-  getCompanies(): any {
-    return { message: 'Companies retrieved successfully', data: companies };
+  @Post('reject-companies')
+  rejectCompanies(@Body() body): any {
+    return { message: 'Companies rejected successfully' };
   }
 
-  @Get('users')
+  // Update Admin property
+  @Patch('update-company/:companyId')
+  updateCompany(@Param('companyId') companyId: string, @Body() patchData): any {
+    return {
+      message: 'Company updated (partial) successfully',
+      data: {},
+    };
+  }
+
+  @Get('programmer')
   getAllUsers(): any {
     return { message: 'Users retrieved successfully', data: users };
   }
 
-  @Delete('remove-user/:userId')
+  @Delete('remove-programmer/:userId')
   removeUser(@Param('userId') userId: string): any {
     return { message: 'User removed successfully' };
   }
@@ -78,7 +197,7 @@ export class AdminController {
     };
   }
 
-  @Get('user-growth')
+  @Get('programmer-growth')
   getUserGrowth(): any {
     return {
       message: 'User growth data retrieved successfully',
@@ -108,72 +227,5 @@ export class AdminController {
       message: 'Recruiter updated successfully',
       data: {},
     };
-  }
-
-  // Update profile on Database
-
-  @Put('update-admin/:id')
-  @UsePipes(new ValidationPipe())
-  updateProfile(
-    @Param('id', ParseIntPipe) id: number,
-
-    @Body() profileInfo: ValidateAdminProfile,
-  ) {
-    return this.appService.updateAdminEntity(id, profileInfo);
-  }
-
-  @Patch('update-company/:companyId')
-  updateCompany(@Param('companyId') companyId: string, @Body() patchData): any {
-    return {
-      message: 'Company updated (partial) successfully',
-      data: {},
-    };
-  }
-
-  //   lab-2
-  @Get(':id')
-  getUser(@Param('id', ParseIntPipe) userId: number) {
-    return { userId };
-  }
-
-  @Post('create-admin')
-  @UsePipes(new ValidationPipe())
-  createAdmin(@Body() profile: ValidateAdminProfile) {
-    return this.appService.createAdminEntity(profile);
-  }
-
-  @Get('get-admins')
-  getAllUser() {
-    return this.appService.getAllAdminEntitys();
-  }
-
-  @Post('upload')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      fileFilter: (req, file, cb) => {
-        if (file.originalname.match(/^.*\.(jpg|png|jpeg)$/)) cb(null, true);
-        else {
-          cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
-        }
-      },
-
-      limits: { fileSize: 6000000 },
-
-      storage: diskStorage({
-        destination: './uploads',
-
-        filename: function (req, file, cb) {
-          cb(null, Date.now() + file.originalname);
-        },
-      }),
-    }),
-  )
-  uploadFile(@UploadedFile() file: Express.Multer.File) {
-    return file;
-  }
-
-  @Get('/get-admin-image/:name')
-  getImages(@Param('name') name, @Res() res) {
-    res.sendFile(name, { root: './uploads' });
   }
 }

@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm'; // change this to your entity class
 import { AdminEntity } from './admin.entity';
+import { ValidateAdminProfile } from './admin.dto';
 @Injectable()
 export class AdminEntityService {
   constructor(
@@ -16,16 +17,20 @@ export class AdminEntityService {
   async getAllAdminEntitys(): Promise<AdminEntity[]> {
     return this.AdminEntityRepository.find();
   }
-  async getAdminEntityById(id: number): Promise<AdminEntity> {
-    return this.AdminEntityRepository.findOneBy({ id: id });
+  async getAdminEntityById(email: string): Promise<AdminEntity> {
+    return this.AdminEntityRepository.findOneBy({ email: email });
   }
+
+  // Admin Profile Update
   async updateAdminEntity(
     id: number,
-    updatedAdminEntity: AdminEntity,
+    updatedAdminEntity: ValidateAdminProfile,
   ): Promise<AdminEntity> {
     await this.AdminEntityRepository.update(id, updatedAdminEntity);
-    return this.AdminEntityRepository.findOneBy({ id: id });
+    const profile = this.AdminEntityRepository.findOneBy({ id: id });
+    return profile;
   }
+
   async deleteAdminEntity(id: number): Promise<void> {
     await this.AdminEntityRepository.delete(id);
   }
