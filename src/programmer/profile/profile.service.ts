@@ -15,17 +15,25 @@ export class ProfileService {
 
   //    Post profile Information
   async createUser(programmerProfile: ProfileEntity): Promise<ProfileEntity> {
-    const password = programmerProfile.password;
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
+    try {
+      const password = programmerProfile.password;
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(password, salt);
 
-    programmerProfile.password = hashedPassword;
-    return this.profileRepository.save(programmerProfile);
+      programmerProfile.password = hashedPassword;
+      return this.profileRepository.save(programmerProfile);
+    } catch (error) {
+      throw error;
+    }
   }
 
   //   Get all profile Information
   async getAllProfileInfo(): Promise<ProfileEntity[]> {
-    return this.profileRepository.find();
+    try {
+      return this.profileRepository.find();
+    } catch (error) {
+      throw error;
+    }
   }
 
   // Update a profile
@@ -33,8 +41,12 @@ export class ProfileService {
     id: number,
     updatedProfile: ProfileDTO,
   ): Promise<ProfileEntity> {
-    await this.profileRepository.update(id, updatedProfile);
-    return this.profileRepository.findOneBy({ id: id });
+    try {
+      await this.profileRepository.update(id, updatedProfile);
+      return this.profileRepository.findOneBy({ id: id });
+    } catch (error) {
+      throw error;
+    }
   }
 
   // Update password
@@ -42,25 +54,38 @@ export class ProfileService {
     id: number,
     updatePasswordDTO: UpdatePasswordDTO,
   ): Promise<ProfileEntity> {
-    const { newPassword } = updatePasswordDTO;
+    try {
+      const { newPassword } = updatePasswordDTO;
 
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(newPassword, salt);
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-    const existingProfile = await this.profileRepository.findOneBy({ id: id });
-    existingProfile.password = hashedPassword;
+      const existingProfile = await this.profileRepository.findOneBy({
+        id: id,
+      });
+      existingProfile.password = hashedPassword;
 
-    return this.profileRepository.save(existingProfile);
+      return this.profileRepository.save(existingProfile);
+    } catch (error) {
+      throw error;
+    }
   }
 
   // Delete a Profile
   async deleteProfile(id: number): Promise<void> {
-    await this.profileRepository.delete(id);
+    try {
+      await this.profileRepository.delete(id);
+    } catch (error) {
+      throw error;
+    }
   }
 
   // Get the profile By ID
   async getProfileById(id: number): Promise<ProfileEntity> {
-    const profile = await this.profileRepository.findOneBy({ id: id });
-    return profile;
+    try {
+      return this.profileRepository.findOneBy({ id: id });
+    } catch (error) {
+      throw error;
+    }
   }
 }

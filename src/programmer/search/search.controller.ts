@@ -1,31 +1,58 @@
 import {
+  Body,
   Controller,
   Get,
-  Query,
+  HttpException,
+  HttpStatus,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { SearchService } from './search.service';
 
 @Controller('programmer')
 export class SearchController {
+  constructor(private searchService: SearchService) {}
+
   // Search Teams
   @Get('/search/teams')
   @UsePipes(new ValidationPipe())
-  searchTeams(
-    @Query('teamName') teamName: string,
-    @Query('teamMembers') teamMembers: string,
-  ) {
-    return { teamName, teamMembers };
+  searchTeams(@Body('teamName') teamName: string) {
+    try {
+      return this.searchService.searchTeams(teamName);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   // Search Programmers
   @Get('/search/programmers')
   @UsePipes(new ValidationPipe())
   searchProgrammers(
-    @Query('name') name: string,
-    @Query('email') email: string,
-    @Query('githubUsername') githubUsername: string,
+    @Body('name') name: string,
+    @Body('email') email: string,
+    @Body('gitHubUsername') gitHubUsername: string,
   ) {
-    return { name, email, githubUsername };
+    try {
+      const result = this.searchService.searchProgrammers(
+        name,
+        email,
+        gitHubUsername,
+      );
+      return result;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
