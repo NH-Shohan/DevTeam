@@ -21,7 +21,7 @@ export class ProjectDTO {
   dateCompleted: Date;
 
   @IsArray()
-  technologiesUsed: string[];
+  technologiesUsed: string;
 
   @IsUrl()
   projectLink: string;
