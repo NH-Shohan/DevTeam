@@ -14,7 +14,6 @@ export class CertificationDTO {
   @Type(() => Date)
   issueDate: Date;
 
-  @IsDate()
-  @Type(() => Date)
-  expirationDate: Date;
+  @IsString()
+  subject: string;
 }
