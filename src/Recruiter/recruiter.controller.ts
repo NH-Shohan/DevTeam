@@ -239,9 +239,9 @@ createCandidateTest(@Body() body): any {
   // ----------------------------------------------
 
   //approve company request
-  @Post('approve-interview-request')
-  approveInterviewRequest(@Body() body): any {
-    return this.appService.approveInterviewRequest(body);
+  @Patch('approve-interview-request/:id')
+  approveInterviewRequest(@Param('id', ParseIntPipe) id: number, @Body() body): any {
+    return this.appService.approveInterviewRequest(id, body);
   }
 
   // company request

@@ -209,23 +209,12 @@ export class RecruiterEntityService {
   }
 
   // Approve Interview Request
-  async approveInterviewRequest(body: any): Promise<any> {
-    try {
-      const { interviewId } = body;
-      const interview = await this.interviewRepository.findOne(interviewId);
-
-      if (!interview) {
-        throw new Error('Interview not found');
-      }
-
-      // Your approval logic, for example, updating the status
-      interview.status = 'Approved';
-      await this.interviewRepository.save(interview);
-
-      return { message: 'Interview request approved successfully' };
-    } catch (error) {
-      throw new Error('Error approving interview request');
-    }
+  async approveInterviewRequest(
+    id: number,
+    updateInterview: InterviewEntity,
+  ): Promise<InterviewEntity> {
+    await this.interviewRepository.update(id, updateInterview);
+    return this.interviewRepository.findOneBy({ id: id });
   }
 
   // Interview Team
