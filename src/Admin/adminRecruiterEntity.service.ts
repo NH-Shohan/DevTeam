@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm'; // change this to your entity class
 import { AdminRecruiterEntity } from './AdminRecruiter.entity';
 import { ValidateAdminRecruiterProfile } from './admin.dto';
-import { AdminRecruiterEntity } from './adminRecruiter.entity';
 @Injectable()
 export class AdminRecruiterEntityService {
   constructor(

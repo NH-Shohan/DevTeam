@@ -30,6 +30,8 @@ import { AdminEntityService } from './admin.service';
 import { SessionGuard } from './session.guard';
 import { AdminRecruiterEntityService } from './adminRecruiterEntity.service';
 import { AdminRecruiterEntity } from './AdminRecruiter.entity';
+import { GrowthEntityService } from './gowth.service';
+import { GrowthEntity } from './growth.entity';
 
 const recruiters = [];
 const companies = [];
@@ -43,6 +45,7 @@ export class AdminController {
   constructor(
     private appService: AdminEntityService,
     private recruiterService: AdminRecruiterEntityService,
+    private growthService: GrowthEntityService,
   ) {}
 
   // Read all Admin
@@ -282,12 +285,15 @@ export class AdminController {
     return { message: 'User removed successfully' };
   }
 
+  // Growth
+  @Post('create-growth')
+  createGrowth(@Body() growth: GrowthEntity) {
+    return this.growthService.createGrowth(growth);
+  }
+
   @Get('company-growth')
   getCompanyGrowth(): any {
-    return {
-      message: 'Company growth data retrieved successfully',
-      data: {},
-    };
+    return this.growthService.getAllGrowth();
   }
 
   @Get('programmer-growth')
