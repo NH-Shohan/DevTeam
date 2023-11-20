@@ -21,6 +21,13 @@ export class AdminEntityService {
     return this.AdminEntityRepository.findOneBy({ email: email });
   }
 
+  async signIn(email: string, password: string): Promise<AdminEntity> {
+    return this.AdminEntityRepository.findOneBy({
+      email: email,
+      password: password,
+    });
+  }
+
   // Admin Profile Update
   async updateAdminEntity(
     id: number,

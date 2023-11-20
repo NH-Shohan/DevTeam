@@ -16,11 +16,14 @@ import {
   Res,
   HttpException,
   HttpStatus,
+  Session,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
-import { ValidateAdminProfile } from './admin.dto';
+import { ValidateAdminProfile, ValidateModeratorProfile } from './admin.dto';
 import { AdminEntityService } from './admin.service';
+import { SessionGuard } from './session.guard';
 
 const recruiters = [];
 const companies = [];
@@ -35,6 +38,7 @@ export class AdminController {
 
   // Read all Admin
   @Get('get-admins')
+  @UseGuards(SessionGuard)
   getAdmin() {
     return this.appService.getAllAdminEntitys();
   }
@@ -75,14 +79,52 @@ export class AdminController {
 
   // Read own admin
   @Get('me/:email')
-  getUser(@Param('email') email: string) {
+  getUser(@Session() session, @Param('email') email: string) {
+    console.log(session);
+    session.email = email;
     return this.appService.getAdminEntityById(email);
+  }
+
+  @Post('signin')
+  async signIn(
+    @Session() session,
+    @Body() body: ValidateAdminProfile,
+  ): Promise<any> {
+    try {
+      const user = await this.appService.signIn(body.email, body.password);
+      if (user) {
+        session.email = user.email;
+        return { status: 'success' };
+      } else {
+        throw new HttpException(
+          'Invalid username or password',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   // Update Admin full profile
   @Put('update-admin/:id')
   @UsePipes(new ValidationPipe())
   updateProfile(
+    @Param('id', ParseIntPipe) id: number,
+
+    @Body() profileInfo: ValidateAdminProfile,
+  ) {
+    const updated = this.appService.updateAdminEntity(id, profileInfo);
+    return {
+      updated,
+      msg: 'Successfully updated',
+    };
+  }
+
+  // Update Admin property
+  @Patch('update-admin-property/:id')
+  // @UsePipes(new ValidationPipe())
+  updateProfileProperty(
     @Param('id', ParseIntPipe) id: number,
 
     @Body() profileInfo: ValidateAdminProfile,
@@ -139,6 +181,40 @@ export class AdminController {
     }
   }
 
+  //   Create Admin
+  @Post('create-admin-moderator')
+  @UsePipes(new ValidationPipe())
+  @UseInterceptors(
+    FileInterceptor('imageName', {
+      fileFilter: (req, file, cb) => {
+        if (file.originalname.match(/^.*\.(jpg|png|jpeg)$/)) cb(null, true);
+        else {
+          cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
+        }
+      },
+
+      limits: { fileSize: 6000000 },
+
+      storage: diskStorage({
+        destination: './uploads',
+
+        filename: function (req, file, cb) {
+          cb(null, Date.now() + file.originalname);
+        },
+      }),
+    }),
+  )
+  createModerator(
+    @Body() profile: ValidateModeratorProfile,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    // You can now use both 'profile' and 'file' to create the admin entity
+    const fileName = file ? file.filename : null;
+    const result = { ...profile, imageName: fileName };
+
+    return this.appService.createAdminEntity(result);
+  }
+
   // Show all Recruiters
   @Get('recruiters')
   getRecruiters(): any {
@@ -168,15 +244,6 @@ export class AdminController {
   @Post('reject-companies')
   rejectCompanies(@Body() body): any {
     return { message: 'Companies rejected successfully' };
-  }
-
-  // Update Admin property
-  @Patch('update-company/:companyId')
-  updateCompany(@Param('companyId') companyId: string, @Body() patchData): any {
-    return {
-      message: 'Company updated (partial) successfully',
-      data: {},
-    };
   }
 
   @Get('programmer')
