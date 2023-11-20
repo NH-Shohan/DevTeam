@@ -12,7 +12,9 @@ import {
   Post,
   Put,
   Res,
+  Session,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
@@ -21,6 +23,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
 import { ProfileDTO } from './profile.dto';
 import { ProfileService } from './profile.service';
+import { SessionGuard } from './session.gaurd';
 import { UpdatePasswordDTO } from './update-password.dto';
 
 @Controller('programmer')
@@ -48,10 +51,12 @@ export class ProfileController {
   )
   @UsePipes(new ValidationPipe())
   createProfile(
+    @Session() session,
     @UploadedFile() file: Express.Multer.File,
     @Body() profileInfo: ProfileDTO,
   ) {
     try {
+      session.email = profileInfo.email;
       const fileName = file ? file.filename : null;
       const result = { ...profileInfo, profilePicture: fileName };
       return this.profileService.createUser(result);
@@ -68,6 +73,7 @@ export class ProfileController {
 
   // Get Programmer Profile
   @Get('profile')
+  @UseGuards(SessionGuard)
   getProfile() {
     try {
       return this.profileService.getAllProfileInfo();
