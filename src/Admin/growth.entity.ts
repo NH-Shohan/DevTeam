@@ -1,19 +1,15 @@
+/* eslint-disable prettier/prettier */
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-
-@Entity('Growth')
+@Entity('growth')
 export class GrowthEntity {
   @PrimaryGeneratedColumn()
   id: number;
-
   @Column()
-  programmer: number;
-
+  programmer: string;
   @Column()
-  recruiter: number;
-
+  recruiter: string;
   @Column()
-  company: number;
-
+  company: string;
   @Column()
   date: string;
 }

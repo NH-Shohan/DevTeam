@@ -298,23 +298,12 @@ export class AdminController {
 
   @Get('programmer-growth')
   getUserGrowth(): any {
-    return {
-      message: 'User growth data retrieved successfully',
-      data: {},
-    };
+    return this.growthService.getAllGrowth();
   }
 
   @Get('recruiter-growth')
   getRecruiterGrowth(): any {
-    return {
-      message: 'Recruiter growth data retrieved successfully',
-      data: {},
-    };
-  }
-
-  @Post('add-admin-moderator')
-  addAdminModerator(@Body() body): any {
-    return { message: 'Admin/Moderator added successfully' };
+    return this.growthService.getAllGrowth();
   }
 
   @Put('update-recruiter/:recruiterId')

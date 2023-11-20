@@ -7,13 +7,13 @@ import { GrowthEntity } from './growth.entity';
 export class GrowthEntityService {
   constructor(
     @InjectRepository(GrowthEntity)
-    private growthRep: Repository<GrowthEntity>,
+    private GrowthRep: Repository<GrowthEntity>,
   ) {}
   // RecruiterEntityRepository is the local repository
   async createGrowth(Profile: GrowthEntity): Promise<GrowthEntity> {
-    return this.growthRep.save(Profile);
+    return this.GrowthRep.save(Profile);
   }
   async getAllGrowth(): Promise<GrowthEntity[]> {
-    return this.growthRep.find();
+    return this.GrowthRep.find();
   }
 }
