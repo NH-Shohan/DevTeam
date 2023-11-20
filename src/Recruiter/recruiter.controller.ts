@@ -14,11 +14,17 @@ import {
   UseInterceptors,
   UploadedFile,
   Res,
+  HttpException,
+  HttpStatus,
+  Session,
+  UseGuards,
 } from '@nestjs/common';
 import { ValidateRecruiterProfile } from './recruiter.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
 import { RecruiterEntityService } from './recruiter.service';
+import { ValidateAdminProfile } from 'src/Admin/admin.dto';
+import { SessionGuard } from './session.guard';
 
 // recruiter
 const interviews = [];
@@ -27,7 +33,7 @@ const candidates = [];
 
 @Controller('recruiter')
 export class RecruiterController {
-  constructor(private readonly appService: RecruiterEntityService) { }
+  constructor(private appService: RecruiterEntityService) { }
 
   @Get("get-recruiters")
   getViewRecruiter(): any {
@@ -60,17 +66,43 @@ export class RecruiterController {
     @Body() profile: ValidateRecruiterProfile,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    // You can now use both 'profile' and 'file' to create the admin entity
-    const fileName = file.filename;
-    const result = { ...profile, image: fileName };
+    try {
+      const fileName = file.filename;
+      const result = { ...profile, image: fileName };
  
-    return this.appService.createRecruiterEntity(result);
+      return this.appService.createRecruiterEntity(result);
+    } catch (error) {
+      console.error('Error creating recruiter:', error.message);
+      throw new Error('Error creating recruiter');
+    }
   }
 
   
-  @Get("get-recruiter/:email")
-  getMyProfile(): any {
-    return this.appService.getAllRecruiterEntitys();
+  @Get("get-recruiter/:id")
+  @UseGuards(SessionGuard)
+  getMyProfile(@Param('id') id): any {
+    return this.appService.getRecruiterEntityById(id);
+  }
+
+  @Post('signin')
+  async signIn(
+    @Session() session,
+    @Body() body: ValidateRecruiterProfile,
+  ): Promise<any> {
+    try {
+      const user = await this.appService.signIn(body.email, body.password);
+      if (user) {
+        session.email = user.email;
+        return { status: 'success' };
+      } else {
+        throw new HttpException(
+          'Invalid username or password',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   // Update profile on Database
@@ -79,19 +111,35 @@ export class RecruiterController {
   @UsePipes(new ValidationPipe())
   updateProfile(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updatedProfile: ValidateRecruiterProfile,
+ 
+    @Body() profileInfo: ValidateRecruiterProfile,
   ) {
-
-    return this.appService.updateRecruiterEntity(id, updatedProfile);
-
+    const updated = this.appService.updateRecruiterEntity(id, profileInfo);
+    return {
+      updated,
+      msg: 'Successfully updated',
+    };
   }
 
 
   //   get image
 
-  @Get('/get-recruiter-image/:name')
-  getImages(@Param('name') name, @Res() res) {
-    res.sendFile(name, { root: './recruiter-uploads' });
+  @Get('/get-recruiter-image/:id')
+  async getProfilePicture(@Param('id') id, @Res() res) {
+    try {
+      const profile = await this.appService.getRecruiterEntityById(id);
+      res.sendFile(profile.image, {
+        root: './uploads',
+      });
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   

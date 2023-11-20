@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { ProgrammerProfileEntity } from 'src/programmer/test/profile.entity';
+import { Entity, Column, PrimaryGeneratedColumn, JoinColumn, OneToOne } from 'typeorm';
 
 @Entity('recruiter')
 export class RecruiterEntity {
@@ -13,5 +14,22 @@ export class RecruiterEntity {
   password: string;
   @Column()
   image: string;
+  
+}
+
+@Entity('Interview')
+export class InterviewEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+  @OneToOne(() => ProgrammerProfileEntity, candidateProfile => candidateProfile.email, {
+    cascade: true
+  })
+  @JoinColumn()
+  candidateProfile: ProgrammerProfileEntity;
+  
+  @Column()
+  date: string;
+  @Column()
+  googleMeetLink: string
   
 }
