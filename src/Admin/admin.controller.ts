@@ -215,11 +215,11 @@ export class AdminController {
     return this.appService.createAdminEntity(result);
   }
 
-  // Show all Recruiters
-  @Get('recruiters')
-  getRecruiters(): any {
-    return { message: 'Recruiters retrieved successfully', data: recruiters };
-  }
+  // // Show all Recruiters
+  // @Get('get-recruiters')
+  // getViewRecruiter(): any {
+  //   return this.appService.getAllRecruiterEntity();
+  // }
 
   @Post('approve-recruiters')
   approveRecruiters(@Body() body): any {
