@@ -1,29 +1,28 @@
 /* eslint-disable prettier/prettier */
 import {
-  Controller,
-  Get,
-  Post,
-  Delete,
-  Param,
   Body,
-  Put,
-  Patch,
-  ParseIntPipe,
-  ValidationPipe,
-  UsePipes,
-  UseInterceptors,
-  UploadedFile,
-  Res,
+  Controller,
+  Delete,
+  Get,
   HttpException,
   HttpStatus,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Put,
+  Res,
   Session,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
-import { ValidateRecruiterProfile } from './recruiter.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
+import { ValidateRecruiterProfile } from './recruiter.dto';
 import { RecruiterEntityService } from './recruiter.service';
-import { ValidateAdminProfile } from 'src/Admin/admin.dto';
 import { SessionGuard } from './session.guard';
 
 // recruiter
@@ -33,9 +32,9 @@ const candidates = [];
 
 @Controller('recruiter')
 export class RecruiterController {
-  constructor(private appService: RecruiterEntityService) { }
+  constructor(private appService: RecruiterEntityService) {}
 
-  @Get("get-recruiters")
+  @Get('get-recruiters')
   getViewRecruiter(): any {
     return this.appService.getAllRecruiterEntitys();
   }
@@ -50,12 +49,12 @@ export class RecruiterController {
           cb(new MulterError('LIMIT_UNEXPECTED_FILE', 'image'), false);
         }
       },
- 
+
       limits: { fileSize: 6000000 },
- 
+
       storage: diskStorage({
         destination: './uploads',
- 
+
         filename: function (req, file, cb) {
           cb(null, Date.now() + file.originalname);
         },
@@ -69,7 +68,7 @@ export class RecruiterController {
     try {
       const fileName = file.filename;
       const result = { ...profile, image: fileName };
- 
+
       return this.appService.createRecruiterEntity(result);
     } catch (error) {
       console.error('Error creating recruiter:', error.message);
@@ -77,8 +76,7 @@ export class RecruiterController {
     }
   }
 
-  
-  @Get("get-recruiter/:id")
+  @Get('get-recruiter/:id')
   @UseGuards(SessionGuard)
   getMyProfile(@Param('id') id): any {
     return this.appService.getRecruiterEntityById(id);
@@ -111,7 +109,7 @@ export class RecruiterController {
   @UsePipes(new ValidationPipe())
   updateProfile(
     @Param('id', ParseIntPipe) id: number,
- 
+
     @Body() profileInfo: ValidateRecruiterProfile,
   ) {
     const updated = this.appService.updateRecruiterEntity(id, profileInfo);
@@ -120,7 +118,6 @@ export class RecruiterController {
       msg: 'Successfully updated',
     };
   }
-
 
   //   get image
 
@@ -142,8 +139,7 @@ export class RecruiterController {
     }
   }
 
-  
- //interview list
+  //interview list
   @Get('interview-list')
   getInterviewList(): any {
     return {
@@ -151,8 +147,7 @@ export class RecruiterController {
       data: interviews,
     };
   }
-  
-  
+
   //set interview
   @Post('set-interview')
   setInterview(@Body() body): any {
@@ -180,12 +175,11 @@ export class RecruiterController {
 
   //delete interview
   @Delete('delete-interview/:developerEmail')
-  deleteInterview(@Param('developerEmail') developerEmail:string):any{
-    return{
-      message:'interview deleted successfully',
-      data:'deletedInterview'
-    }
-
+  deleteInterview(@Param('developerEmail') developerEmail: string): any {
+    return {
+      message: 'interview deleted successfully',
+      data: 'deletedInterview',
+    };
   }
 
   //view interviewteam
@@ -217,100 +211,57 @@ export class RecruiterController {
   }
 
   //remove candidate
-  
+
   @Delete('delete-candidate/:id')
   deleteProfile(@Param('id', ParseIntPipe) id: number) {
     this.appService.deleteRecruiterEntity(id);
-    return "success";
+    return 'success';
   }
+
   //see all candidates
   @Get('show-candidates')
   getCandidates(): any {
-    return { message: 'Candidates retrieved successfully', data: candidates };
+    return this.appService.getCandidates();
   }
 
-  // @Get('candidate-requests')
-  // getCandidateRequestsForJob(): any {
-  //   return {
-  //     message: 'Candidate requests retrieved successfully',
-  //     data: {},
-  //   };
-  // }
-
-  
-   
   //Approve Candidate
   @Post('approve-candidates')
   approveCandidatesForJob(@Body() body): any {
-    return { message: 'Candidates approved successfully' };
+    return this.appService.approveCandidatesForJob(body);
   }
   //Reject Candidate
   @Post('reject-candidates')
   rejectCandidates(@Body() body): any {
-    return { message: 'Candidates rejected successfully' };
+    return this.appService.rejectCandidates(body);
   }
 
- //approve company request
+  //approve company request
   @Post('approve-interview-request')
   approveInterviewRequest(@Body() body): any {
-    return { message: 'Interview requests approved successfully', data: body };
+    return this.appService.approveInterviewRequest(body);
   }
 
   //Reject company request
   @Post('reject-company-request')
   rejectCompanyRequest(@Body() body): any {
-    return { message: 'Candidates rejected successfully' };
+    return this.appService.rejectCompanyRequest(body);
   }
 
   //Full Recruiter team
   @Post('recruit-team')
   recruitTeam(@Body() body): any {
-    return { message: 'Team members recruited successfully' };
+    return this.appService.recruitTeam(body);
   }
 
   //View message from Candidate
   @Get('messages-from-candidates')
   getMessagesFromCandidates(): any {
-    return {
-      message: 'Messages from candidates retrieved successfully',
-      data: {},
-    };
+    return this.appService.getMessagesFromCandidates();
   }
 
   //View message from companies
   @Get('messages-from-companies')
   getMessagesFromCompanies(): any {
-    return {
-      message: 'Messages from companies retrieved successfully',
-      data: {},
-    };
+    return this.appService.getMessagesFromCompanies();
   }
-
-  
-   
-
-  
-
-  //   Lab-2
-
-  // @Get(':id')
-  // getUser(@Param('id', ParseIntPipe) userId: number) {
-  //   return { msg: 'recruiter er kaaj', userId: userId };
-  // }
-
-  //   file upload
-  
-
-
-
-  
-
-  // Delete candidate
-
-  
-
-
-
-  
-
 }
