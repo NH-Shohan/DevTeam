@@ -62,6 +62,14 @@ export class RecruiterEntityService {
   // Candidates
   // ----------------------------------------------------------
 
+  async createCandidate(profile): Promise<CandidateEntity[]> {
+    try {
+      return await this.candidateRepository.save(profile);
+    } catch (error) {
+      throw new Error('Error fetching candidates');
+    }
+  }
+  
   async getCandidates(): Promise<CandidateEntity[]> {
     try {
       return await this.candidateRepository.find();

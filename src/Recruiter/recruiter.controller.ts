@@ -195,11 +195,19 @@ export class RecruiterController {
     return 'success';
   }
 
+//Approve Candidate
+@Post('create-candidate')
+createCandidateTest(@Body() body): any {
+  return this.appService.createCandidate(body);
+}
+
+
   //see all candidates
   @Get('show-candidates')
   getCandidates(): any {
     return this.appService.getCandidates();
   }
+
 
   //Approve Candidate
   @Post('approve-candidates')
