@@ -2,8 +2,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm'; // change this to your entity class
-import { AdminEntity } from './admin.entity';
+import { AdminEntity, RelationEntity } from './admin.entity';
 import { ValidateAdminProfile } from './admin.dto';
+import { RecruiterEntity } from 'src/Recruiter/recruiter.entity';
 @Injectable()
 export class AdminEntityService {
   constructor(
@@ -40,5 +41,49 @@ export class AdminEntityService {
 
   async deleteAdminEntity(id: number): Promise<void> {
     await this.AdminEntityRepository.delete(id);
+  }
+}
+
+// Relation
+@Injectable()
+export class All3RelationService {
+  constructor(
+    @InjectRepository(RelationEntity)
+    private AdminEntityRepository: Repository<RelationEntity>,
+  ) {}
+
+  async getAllAdminEntitys(): Promise<RelationEntity[]> {
+    return this.AdminEntityRepository.find();
+  }
+}
+
+// Relation
+@Injectable()
+export class RecruiterEntityServiceFromAdmin {
+  constructor(
+    @InjectRepository(RecruiterEntity)
+    private RecruiterEntityRepository: Repository<RecruiterEntity>,
+  ) {}
+  // RecruiterEntityRepository is the local repository
+  async createRecruiterEntity(
+    Profile: RecruiterEntity,
+  ): Promise<RecruiterEntity> {
+    return this.RecruiterEntityRepository.save(Profile);
+  }
+  async getAllRecruiterEntitys(): Promise<RecruiterEntity[]> {
+    return this.RecruiterEntityRepository.find();
+  }
+  async getRecruiterEntityById(id: number): Promise<RecruiterEntity> {
+    return this.RecruiterEntityRepository.findOneBy({ id: id });
+  }
+  async updateRecruiterEntity(
+    id: number,
+    updatedRecruiterEntity: RecruiterEntity,
+  ): Promise<RecruiterEntity> {
+    await this.RecruiterEntityRepository.update(id, updatedRecruiterEntity);
+    return this.RecruiterEntityRepository.findOneBy({ id: id });
+  }
+  async deleteRecruiterEntity(id: number): Promise<void> {
+    await this.RecruiterEntityRepository.delete(id);
   }
 }

@@ -21,9 +21,15 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
-import { ValidateAdminProfile, ValidateModeratorProfile } from './admin.dto';
+import {
+  ValidateAdminProfile,
+  ValidateAdminRecruiterProfile,
+  ValidateModeratorProfile,
+} from './admin.dto';
 import { AdminEntityService } from './admin.service';
 import { SessionGuard } from './session.guard';
+import { AdminRecruiterEntityService } from './adminRecruiterEntity.service';
+import { AdminRecruiterEntity } from './AdminRecruiter.entity';
 
 const recruiters = [];
 const companies = [];
@@ -34,7 +40,10 @@ const users = [];
 
 @Controller('admin')
 export class AdminController {
-  constructor(private appService: AdminEntityService) {}
+  constructor(
+    private appService: AdminEntityService,
+    private recruiterService: AdminRecruiterEntityService,
+  ) {}
 
   // Read all Admin
   @Get('get-admins')
@@ -215,20 +224,37 @@ export class AdminController {
     return this.appService.createAdminEntity(result);
   }
 
-  // // Show all Recruiters
-  // @Get('get-recruiters')
-  // getViewRecruiter(): any {
-  //   return this.appService.getAllRecruiterEntity();
-  // }
-
-  @Post('approve-recruiters')
-  approveRecruiters(@Body() body): any {
-    return { message: 'Recruiters approved successfully' };
+  // Show all Recruiters
+  @Get('get-recruiters')
+  getViewRecruiter(): any {
+    return this.recruiterService.getAllRecruiterEntitys();
   }
 
-  @Post('reject-recruiters')
-  rejectRecruiters(@Body() body): any {
-    return { message: 'Recruiters rejected successfully' };
+  // Show all Recruiters
+  // creates
+  @Post('create-recruiter')
+  @UsePipes(new ValidationPipe())
+  createRecruiter(@Body() profile: ValidateAdminRecruiterProfile) {
+    return this.recruiterService.createRecruiterEntity(profile);
+  }
+
+  @Patch('approve-recruiters/:id')
+  @UsePipes(new ValidationPipe())
+  approveRecruiters(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() profile: AdminRecruiterEntity,
+  ): any {
+    return this.recruiterService.updateRecruiterEntity(id, profile);
+  }
+
+  @Delete('reject-recruiters/:id')
+  rejectRecruiters(@Param('id') id): any {
+    try {
+      this.recruiterService.deleteRecruiterEntity(id);
+    } catch (error) {
+      console.log(error);
+    }
+    return { msg: 'Deleted Successfully' };
   }
 
   @Get('companies')

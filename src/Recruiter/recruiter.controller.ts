@@ -198,8 +198,6 @@ export class RecruiterController {
     res.sendFile(name, { root: './recruiter-uploads' });
   }
 
-
-
   // creates
   @Post('create-recruiter')
   @UsePipes(new ValidationPipe())
@@ -212,15 +210,15 @@ export class RecruiterController {
   @Delete('delete-recruiter/:id')
   deleteProfile(@Param('id', ParseIntPipe) id: number) {
     this.appService.deleteRecruiterEntity(id);
-    return "success";
-    }
+    return 'success';
+  }
 
-  @Get("Show-recruiter")
-  getViewRecruiter():any{
+  @Get('Show-recruiter')
+  getViewRecruiter(): any {
     return this.appService.getAllRecruiterEntitys();
-    }
+  }
 
-    // Update profile on Database
+  // Update profile on Database
 
   @Put('update-recruiter/:id')
   @UsePipes(new ValidationPipe())
@@ -228,9 +226,6 @@ export class RecruiterController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updatedProfile: ValidateRecruiterProfile,
   ) {
-
     return this.appService.updateRecruiterEntity(id, updatedProfile);
-
   }
-
 }
