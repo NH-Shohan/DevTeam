@@ -76,6 +76,12 @@ export class RecruiterController {
     }
   }
 
+  //Full Recruiter team
+  @Post('recruit-team')
+  recruitTeam(@Body() body): any {
+    return this.appService.recruitTeam(body);
+  }
+
   @Get('get-recruiter/:id')
   @UseGuards(SessionGuard)
   getMyProfile(@Param('id') id): any {
@@ -119,7 +125,7 @@ export class RecruiterController {
     };
   }
 
-  //   get image
+  // getimage
 
   @Get('/get-recruiter-image/:id')
   async getProfilePicture(@Param('id') id, @Res() res) {
@@ -139,79 +145,50 @@ export class RecruiterController {
     }
   }
 
-  //interview list
+  // Interview
+  // ------------------------------------------------
+
+  // Get Interview List
   @Get('interview-list')
-  getInterviewList(): any {
-    return {
-      message: 'Interview list retrieved successfully',
-      data: interviews,
-    };
+  async getInterviewList(): Promise<any> {
+    return this.appService.getInterviewList();
   }
 
-  //set interview
+  // Set Interview
   @Post('set-interview')
-  setInterview(@Body() body): any {
-    const returnVariable = {
-      message: 'Interview set successfully',
-      data: body,
-    };
-    return returnVariable;
+  @UsePipes(new ValidationPipe())
+  async setInterview(@Body() interviewInfo): Promise<any> {
+    return this.appService.setInterview(interviewInfo);
   }
 
-  //update interview
-
+  // Update Interview
   @Put('update-interview/:interviewId')
-  updateInterview(
+  @UsePipes(new ValidationPipe())
+  async updateInterview(
     @Param('interviewId') interviewId: string,
     @Body() updateData,
-  ): any {
-    return {
-      message: 'Interview updated successfully',
-      data: {
-        updateData,
-      },
-    };
+  ): Promise<any> {
+    return this.appService.updateInterview(interviewId, updateData);
   }
 
-  //delete interview
+  // Delete Interview
   @Delete('delete-interview/:developerEmail')
-  deleteInterview(@Param('developerEmail') developerEmail: string): any {
-    return {
-      message: 'interview deleted successfully',
-      data: 'deletedInterview',
-    };
+  async deleteInterview(
+    @Param('developerEmail') developerEmail: string,
+  ): Promise<any> {
+    return this.appService.deleteInterview(developerEmail);
   }
 
   //view interviewteam
-  @Post('interview-team')
-  interviewTeam(@Body() body): any {
-    return { message: 'Team members interviewed successfully' };
-  }
+  // @Post('interview-team')
+  // interviewTeam(@Body() body): any {
+  //   return { message: 'Team members interviewed successfully' };
+  // }
 
-  @Get('company-requests')
-  getCompanyRequests(): any {
-    return {
-      message: 'Company requests retrieved successfully',
-      data: jobRequests,
-    };
-  }
-
-  // update candidate status
-  @Patch('update-candidate/:candidateId')
-  updateCandidate(
-    @Param('candidateId') candidateId: string,
-    @Body() patchData,
-  ): any {
-    return {
-      message: 'Candidate updated (partial) successfully',
-      data: {
-        patchData,
-      },
-    };
-  }
+  // Candidate
+  // --------------------------------------------
 
   //remove candidate
-
   @Delete('delete-candidate/:id')
   deleteProfile(@Param('id', ParseIntPipe) id: number) {
     this.appService.deleteRecruiterEntity(id);
@@ -229,11 +206,29 @@ export class RecruiterController {
   approveCandidatesForJob(@Body() body): any {
     return this.appService.approveCandidatesForJob(body);
   }
+
   //Reject Candidate
-  @Post('reject-candidates')
+  @Delete('reject-candidates')
   rejectCandidates(@Body() body): any {
     return this.appService.rejectCandidates(body);
   }
+
+  // update candidate status
+  @Patch('update-candidate/:candidateId')
+  updateCandidate(
+    @Param('candidateId') candidateId: string,
+    @Body() patchData,
+  ): any {
+    return {
+      message: 'Candidate updated (partial) successfully',
+      data: {
+        patchData,
+      },
+    };
+  }
+
+  // Others
+  // ----------------------------------------------
 
   //approve company request
   @Post('approve-interview-request')
@@ -241,16 +236,19 @@ export class RecruiterController {
     return this.appService.approveInterviewRequest(body);
   }
 
-  //Reject company request
-  @Post('reject-company-request')
-  rejectCompanyRequest(@Body() body): any {
-    return this.appService.rejectCompanyRequest(body);
+  // company request
+  @Get('company-requests')
+  getCompanyRequests(): any {
+    return {
+      message: 'Company requests retrieved successfully',
+      data: jobRequests,
+    };
   }
 
-  //Full Recruiter team
-  @Post('recruit-team')
-  recruitTeam(@Body() body): any {
-    return this.appService.recruitTeam(body);
+  //Reject company request
+  @Delete('reject-company-request')
+  rejectCompanyRequest(@Body() body): any {
+    return this.appService.rejectCompanyRequest(body);
   }
 
   //View message from Candidate
