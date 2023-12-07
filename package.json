@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "client": "cd client && yarn run dev",
     "all": "concurrently \"yarn start:dev\" \"yarn run client\"",
-    "server-install": "yarn",
+    "server-install": "yarn install",
     "client-install": "cd client && yarn",
     "install-all": "concurrently \"yarn run server-install\" \"yarn run client-install\""
   },

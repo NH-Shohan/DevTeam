@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { ProgrammerProfileEntity } from 'src/programmer/test/profile.entity';
+import { ProfileEntity } from 'src/programmer/profile/profile.entity';
 import {
   Column,
   Entity,
@@ -27,14 +27,14 @@ export class InterviewEntityError {
   @PrimaryGeneratedColumn()
   id: number;
   @OneToOne(
-    () => ProgrammerProfileEntity,
+    () => ProfileEntity,
     (candidateProfile) => candidateProfile.email,
     {
       cascade: true,
     },
   )
   @JoinColumn()
-  candidateProfile: ProgrammerProfileEntity;
+  candidateProfile: ProfileEntity;
 
   @Column()
   date: string;

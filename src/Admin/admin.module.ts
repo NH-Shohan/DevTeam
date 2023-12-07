@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
 // import { AdminService } from './admin.service';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminController } from './admin.controller';
 import { AdminEntity } from './admin.entity';
-import { Module } from '@nestjs/common';
 // import { AppService } from 'src/app.service';
 import { AdminEntityService } from './admin.service';
+import { AdminRecruiterEntity } from './adminRecruiter.entity';
 import { AdminRecruiterEntityService } from './adminRecruiterEntity.service';
-import { AdminRecruiterEntity } from './AdminRecruiter.entity';
 import { GrowthEntityService } from './gowth.service';
 import { GrowthEntity } from './growth.entity';
 @Module({

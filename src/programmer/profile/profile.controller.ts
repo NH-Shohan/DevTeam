@@ -71,6 +71,11 @@ export class ProfileController {
     }
   }
 
+  @Get('test')
+  GetTest() {
+    return 'Hello Hoye gese';
+  }
+
   // Get Programmer Profile
   @Get('profile')
   @UseGuards(SessionGuard)

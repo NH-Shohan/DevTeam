@@ -29,11 +29,11 @@ import {
 import { AdminEntityService } from './admin.service';
 import { SessionGuard } from './session.guard';
 import { AdminRecruiterEntityService } from './adminRecruiterEntity.service';
-import { AdminRecruiterEntity } from './AdminRecruiter.entity';
+import { AdminRecruiterEntity } from './adminRecruiter.entity';
 import { GrowthEntityService } from './gowth.service';
 import { GrowthEntity } from './growth.entity';
 
-const recruiters = [];
+// const recruiters = [];
 const companies = [];
 const users = [];
 
