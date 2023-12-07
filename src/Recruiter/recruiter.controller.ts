@@ -195,19 +195,17 @@ export class RecruiterController {
     return 'success';
   }
 
-//Approve Candidate
-@Post('create-candidate')
-createCandidateTest(@Body() body): any {
-  return this.appService.createCandidate(body);
-}
-
+  //Approve Candidate
+  @Post('create-candidate')
+  createCandidateTest(@Body() body): any {
+    return this.appService.createCandidate(body);
+  }
 
   //see all candidates
   @Get('show-candidates')
   getCandidates(): any {
     return this.appService.getCandidates();
   }
-
 
   //Approve Candidate
   @Post('approve-candidates')
@@ -240,7 +238,10 @@ createCandidateTest(@Body() body): any {
 
   //approve company request
   @Patch('approve-interview-request/:id')
-  approveInterviewRequest(@Param('id', ParseIntPipe) id: number, @Body() body): any {
+  approveInterviewRequest(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body,
+  ): any {
     return this.appService.approveInterviewRequest(id, body);
   }
 
@@ -263,11 +264,5 @@ createCandidateTest(@Body() body): any {
   @Get('messages-from-candidates')
   getMessagesFromCandidates(): any {
     return this.appService.getMessagesFromCandidates();
-  }
-
-  //View message from companies
-  @Get('messages-from-companies')
-  getMessagesFromCompanies(): any {
-    return this.appService.getMessagesFromCompanies();
   }
 }
