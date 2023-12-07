@@ -9,6 +9,7 @@ import {
   Matches,
   MaxLength,
 } from 'class-validator';
+import { CertificationEntity } from '../certifications/certification.entity';
 
 export class ProfileDTO {
   id: number;
@@ -66,4 +67,6 @@ export class ProfileDTO {
 
   @IsNotEmpty()
   experiences: number;
+
+  profile: CertificationEntity[];
 }

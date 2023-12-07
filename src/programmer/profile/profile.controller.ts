@@ -4,13 +4,17 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
   Post,
   Put,
   Res,
+  Session,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
@@ -19,6 +23,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
 import { ProfileDTO } from './profile.dto';
 import { ProfileService } from './profile.service';
+import { SessionGuard } from './session.gaurd';
 import { UpdatePasswordDTO } from './update-password.dto';
 
 @Controller('programmer')
@@ -46,18 +51,41 @@ export class ProfileController {
   )
   @UsePipes(new ValidationPipe())
   createProfile(
+    @Session() session,
     @UploadedFile() file: Express.Multer.File,
     @Body() profileInfo: ProfileDTO,
   ) {
-    const fileName = file ? file.filename : null;
-    const result = { ...profileInfo, profilePicture: fileName };
-    return this.profileService.createUser(result);
+    try {
+      session.email = profileInfo.email;
+      const fileName = file ? file.filename : null;
+      const result = { ...profileInfo, profilePicture: fileName };
+      return this.profileService.createUser(result);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   // Get Programmer Profile
   @Get('profile')
+  @UseGuards(SessionGuard)
   getProfile() {
-    return this.profileService.getAllProfileInfo();
+    try {
+      return this.profileService.getAllProfileInfo();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   // Update Programmer Profile
@@ -67,7 +95,17 @@ export class ProfileController {
     @Param('programmerId', ParseIntPipe) programmerId: number,
     @Body() profileInfo: ProfileDTO,
   ) {
-    return this.profileService.updateProfile(programmerId, profileInfo);
+    try {
+      return this.profileService.updateProfile(programmerId, profileInfo);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   // Partially Update Password
@@ -77,10 +115,20 @@ export class ProfileController {
     @Param('programmerId', ParseIntPipe) programmerId: number,
     @Body() updatePassword: UpdatePasswordDTO,
   ) {
-    return this.profileService.updateProfilePassword(
-      programmerId,
-      updatePassword,
-    );
+    try {
+      return this.profileService.updateProfilePassword(
+        programmerId,
+        updatePassword,
+      );
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   // Delete Programmer Profile
@@ -89,16 +137,35 @@ export class ProfileController {
   deleteProgrammerProfile(
     @Param('programmerId', ParseIntPipe) programmerId: number,
   ) {
-    return this.profileService.deleteProfile(programmerId);
+    try {
+      return this.profileService.deleteProfile(programmerId);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   // Get Profile Pic
   @Get('/profilePic/:id')
   async getProfilePicture(@Param('id') id, @Res() res) {
-    const profile = await this.profileService.getProfileById(id);
-
-    res.sendFile(profile.profilePicture, {
-      root: './src/programmer/profile/ProfilePics',
-    });
+    try {
+      const profile = await this.profileService.getProfileById(id);
+      res.sendFile(profile.profilePicture, {
+        root: './src/programmer/profile/ProfilePics',
+      });
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Post,
@@ -11,39 +13,85 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { CertificationDTO } from './certification.dto';
+import { CertificationsService } from './certification.service';
 
 @Controller('programmer')
 export class CertificationsController {
-  //   Add Certification
+  constructor(private certificationsService: CertificationsService) {}
+
+  // Add Certification
   @Post('certifications')
   @UsePipes(new ValidationPipe())
   addCertification(@Body() certificationsInfo: CertificationDTO) {
-    return certificationsInfo;
+    try {
+      return this.certificationsService.addCertification(certificationsInfo);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  //   Get All Certifications
+  // Get All Certifications
   @Get('certifications')
   @UsePipes(new ValidationPipe())
-  getAllCertifications(@Body() certificationsInfo: CertificationDTO) {
-    return certificationsInfo;
+  getAllCertifications() {
+    try {
+      return this.certificationsService.getAllCertifications();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  //   Update Certification
+  // Update Certification
   @Put('certifications/:certificationId')
   @UsePipes(new ValidationPipe())
   updateCertifications(
     @Param('certificationId', ParseIntPipe) certificationId: number,
     @Body() certificationsInfo: CertificationDTO,
   ) {
-    return { certificationId, certificationsInfo };
+    try {
+      return this.certificationsService.updateCertifications(
+        certificationId,
+        certificationsInfo,
+      );
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  //   Delete Certification
+  // Delete Certification
   @Delete('certifications/:certificationId')
   @UsePipes(new ValidationPipe())
   deleteCertification(
     @Param('certificationId', ParseIntPipe) certificationId: number,
   ) {
-    return certificationId;
+    try {
+      return this.certificationsService.deleteCertification(certificationId);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          error: 'Internal Server Error',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
