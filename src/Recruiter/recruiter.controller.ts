@@ -265,10 +265,4 @@ export class RecruiterController {
   getMessagesFromCandidates(): any {
     return this.appService.getMessagesFromCandidates();
   }
-
-  //View message from companies
-  @Get('messages-from-companies')
-  getMessagesFromCompanies(): any {
-    return this.appService.getMessagesFromCompanies();
-  }
 }
