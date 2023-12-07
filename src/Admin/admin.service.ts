@@ -5,6 +5,21 @@ import { Repository } from 'typeorm'; // change this to your entity class
 import { AdminEntity, RelationEntity } from './admin.entity';
 import { ValidateAdminProfile } from './admin.dto';
 import { RecruiterEntity } from 'src/Recruiter/recruiter.entity';
+import { MailerModule, MailerService } from '@nestjs-modules/mailer';
+
+MailerModule.forRoot({
+  transport: {
+    host: 'smtp.gmail.com',
+    port: 465,
+    ignoreTLS: true,
+    secure: true,
+    auth: {
+      user: '',
+      pass: '',
+    },
+  },
+});
+
 @Injectable()
 export class AdminEntityService {
   constructor(
@@ -22,7 +37,14 @@ export class AdminEntityService {
     return this.AdminEntityRepository.findOneBy({ email: email });
   }
 
+  private mailerService: MailerService;
+
   async signIn(email: string, password: string): Promise<AdminEntity> {
+    // await this.mailerService.sendMail({
+    //   to: email,
+    //   subject: 'Email',
+    //   text: 'Done',
+    // });
     return this.AdminEntityRepository.findOneBy({
       email: email,
       password: password,

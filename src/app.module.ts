@@ -17,6 +17,7 @@ import { RecruiterModule } from './Recruiter/recruiter.module';
       autoLoadEntities: true,
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: false,
+      logging: false,
     }),
     AdminModule,
     RecruiterModule,
