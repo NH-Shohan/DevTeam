@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ProfileEntity } from '../profile/profile.entity';
 
 @Entity('ProgrammerCertification')
 export class CertificationEntity {
@@ -16,4 +17,7 @@ export class CertificationEntity {
 
   @Column({ name: 'Subject' })
   subject: string;
+
+  @ManyToOne(() => ProfileEntity, (certificate) => certificate.profile)
+  certificate: ProfileEntity;
 }

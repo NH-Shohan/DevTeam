@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { CertificationEntity } from '../certifications/certification.entity';
 
 @Entity('ProgrammerProfile')
 export class ProfileEntity {
@@ -40,4 +41,7 @@ export class ProfileEntity {
 
   @Column({ name: 'Work Experiences' })
   experiences: number;
+
+  @OneToMany(() => CertificationEntity, (profile) => profile.certificate)
+  profile: CertificationEntity[];
 }
