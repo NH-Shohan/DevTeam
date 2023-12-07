@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminModule } from './Admin/admin.module';
 import { CompanyModule } from './company/company.module';
 import { ProgrammerModule } from './programmer/programmer.module';
+import { RecruiterModule } from './Recruiter/recruiter.module';
 
 @Module({
   imports: [
@@ -14,9 +15,12 @@ import { ProgrammerModule } from './programmer/programmer.module';
       password: 'password',
       database: 'DevTeam',
       autoLoadEntities: true,
-      synchronize: true,
+      entities: ['dist/**/*.entity{.ts,.js}'],
+      synchronize: false,
+      logging: false,
     }),
     AdminModule,
+    RecruiterModule,
     ProgrammerModule,
     CompanyModule,
   ],

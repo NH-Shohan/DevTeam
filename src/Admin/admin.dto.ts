@@ -21,4 +21,58 @@ export class ValidateAdminProfile {
       'Password must be minimum 8 characters, at least one letter, one number and one special character',
   })
   password: string;
+
+  imageName: string;
+}
+
+export class ValidateModeratorProfile {
+  id: number;
+  @IsString()
+  @Matches(/^[A-Za-z]+$/, {
+    message: 'Name must be string',
+  })
+  @MaxLength(30)
+  name: string;
+
+  @IsEmail()
+  @Matches(/^[a-zA-Z0-9._%+-]+@admin\.moderator\.com$/, {
+    message: 'Email must be in the format someone@admin.moderator.com',
+  })
+  email: string;
+
+  @Length(2, 30, {
+    message: 'Leanth can not be less than 2 and more than 30 character.',
+  })
+  @Matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, {
+    message:
+      'Password must be minimum 8 characters, at least one letter, one number and one special character',
+  })
+  password: string;
+
+  imageName: string;
+}
+
+export class ValidateAdminRecruiterProfile {
+  id: number;
+
+  @IsString()
+  @Matches(/^[A-Za-z]+$/, {
+    message: 'Name must be string',
+  })
+  @MaxLength(30)
+  name: string;
+
+  @IsEmail()
+  email: string;
+
+  @Length(2, 30, {
+    message: 'Length can not be less than 2 and more than 30 character.',
+  })
+  @Matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, {
+    message:
+      'Password must be minimum 8 characters, at least one letter, one number and one special character',
+  })
+  password: string;
+
+  status: string;
 }
