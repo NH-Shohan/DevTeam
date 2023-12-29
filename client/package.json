@@ -11,10 +11,12 @@
   "dependencies": {
     "next": "14.0.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "tailwind-scrollbar": "^3.0.5"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",
+    "daisyui": "^4.4.24",
     "eslint": "^8",
     "eslint-config-next": "14.0.3",
     "postcss": "^8",
