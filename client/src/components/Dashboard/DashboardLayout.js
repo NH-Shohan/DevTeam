@@ -7,6 +7,7 @@ import Routes from '../Routes/Routes';
 
 export default function DashboardLayout({ children }) {
   const pathname = usePathname();
+  const role = 'company';
 
   return (
     <>
@@ -24,11 +25,31 @@ export default function DashboardLayout({ children }) {
 
           <hr className="border border-light w-full my-7" />
 
-          <Routes path="/ProgrammerHome" name={'Home'} />
-          <Routes path="/ProgrammerDashboard" name={'Dashboard'} />
+          {role === 'admin' ? (
+            <>
+              <Routes path="/AdminHome" name={'Home'} />
+              <Routes path="/AdminDashboard" name={'Dashboard'} />
+            </>
+          ) : role === 'programmer' ? (
+            <>
+              <Routes path="/ProgrammerHome" name={'Home'} />
+              <Routes path="/ProgrammerDashboard" name={'Dashboard'} />
+            </>
+          ) : role === 'company' ? (
+            <>
+              <Routes path="/CompanyHome" name={'Home'} />
+              <Routes
+                path="/CompanyPersonalInformation"
+                name={'Personal Information'}
+              />
+              <Routes path="/CreateJob" name={'Create Job'} />
+              <Routes path="/ManageJob" name={'Manage Job'} />
+              <Routes path="/AvailableJobs" name={'Available Jobs'} />
+            </>
+          ) : null}
 
           <div className="absolute bottom-0 w-full p-5">
-            <Link href={'/'} className="w-full">
+            <Link href={'/SignIn'} className="w-full">
               <button
                 className={`hover:bg-red-light text-red small-bold w-full py-2 rounded-lg small text-left pl-4 transition-all`}
               >

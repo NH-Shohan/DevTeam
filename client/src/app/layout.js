@@ -1,3 +1,4 @@
+import AuthProvider from '@/context/AuthContext';
 import { Roboto_Slab } from 'next/font/google';
 import './globals.css';
 
@@ -12,7 +13,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${roboto_Slab.className} container mx-auto`}>
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

@@ -21,10 +21,10 @@ export default function SignIn() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (email === 'shohan@gmail.com' && password === '123456') {
-      router.replace('/user');
-    } else if (email === 'shohan@admin.com' && password === '123456') {
-      router.replace('/admin');
+    if (email === 'programmer@gmail.com' && password === '123456') {
+      router.replace('/ProgrammerHome');
+    } else if (email === 'dev@admin.com' && password === '123456') {
+      router.replace('/AdminHome');
     } else {
       console.log('Invalid email or password');
     }
@@ -33,7 +33,7 @@ export default function SignIn() {
   return (
     <div className="container mx-auto flex items-center justify-center w-screen h-screen">
       <form className="bg-light p-10 rounded-xl h-fit w-1/3">
-        <h2 className="text-center text-black mb-3">Sign in</h2>
+        <h2 className="text-center text-blue mb-3">Sign in</h2>
 
         <label className="text-gray-light small">Email</label>
         <input
@@ -42,7 +42,7 @@ export default function SignIn() {
           name="email"
           placeholder="Enter email"
           required
-          className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light"
+          className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light focus:border-blue"
           onChange={handleChangeEmail}
         />
 
@@ -53,7 +53,7 @@ export default function SignIn() {
           name="password"
           placeholder="Enter password"
           required
-          className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light"
+          className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light focus:border-blue"
           onChange={handleChangePassword}
         />
 
