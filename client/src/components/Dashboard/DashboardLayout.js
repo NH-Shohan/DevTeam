@@ -7,7 +7,7 @@ import Routes from '../Routes/Routes';
 
 export default function DashboardLayout({ children }) {
   const pathname = usePathname();
-  const role = 'company';
+  const role = 'programmer';
 
   return (
     <>
@@ -33,7 +33,13 @@ export default function DashboardLayout({ children }) {
           ) : role === 'programmer' ? (
             <>
               <Routes path="/ProgrammerHome" name={'Home'} />
-              <Routes path="/ProgrammerDashboard" name={'Dashboard'} />
+              <Routes path="/ApplyJob" name={'Apply Job'} />
+              <Routes path="/Interviews" name={'Interviews'} />
+              <Routes path="/ProgrammerMessages" name={'Messages'} />
+              <Routes
+                path="/PersonalInformation"
+                name={'Personal Information'}
+              />
             </>
           ) : role === 'company' ? (
             <>
