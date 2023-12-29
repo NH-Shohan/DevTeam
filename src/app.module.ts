@@ -16,8 +16,9 @@ import { RecruiterModule } from './Recruiter/recruiter.module';
       database: 'DevTeam',
       autoLoadEntities: true,
       entities: ['dist/**/*.entity{.ts,.js}'],
-      synchronize: false,
+      synchronize: true,
       logging: false,
+      // dropSchema:true
     }),
     AdminModule,
     RecruiterModule,

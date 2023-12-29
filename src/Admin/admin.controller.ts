@@ -50,7 +50,7 @@ export class AdminController {
 
   // Read all Admin
   @Get('get-admins')
-  @UseGuards(SessionGuard)
+  // @UseGuards(SessionGuard)
   getAdmin() {
     return this.appService.getAllAdminEntitys();
   }
@@ -82,6 +82,7 @@ export class AdminController {
     @Body() profile: ValidateAdminProfile,
     @UploadedFile() file: Express.Multer.File,
   ) {
+    console.log(profile);
     // You can now use both 'profile' and 'file' to create the admin entity
     const fileName = file ? file.filename : null;
     const result = { ...profile, imageName: fileName };
@@ -118,35 +119,45 @@ export class AdminController {
     }
   }
 
-  // Update Admin full profile
-  @Put('update-admin/:id')
-  @UsePipes(new ValidationPipe())
-  updateProfile(
-    @Param('id', ParseIntPipe) id: number,
-
-    @Body() profileInfo: ValidateAdminProfile,
-  ) {
-    const updated = this.appService.updateAdminEntity(id, profileInfo);
-    return {
-      updated,
-      msg: 'Successfully updated',
-    };
+  @Delete('delete-admin/:id')
+  deleteAdmin(@Param('id') id): any {
+    try {
+      this.appService.deleteAdminEntity(id);
+    } catch (error) {
+      console.log(error);
+    }
+    return { msg: 'Deleted Successfully' };
   }
+
+  // Update Admin full profile
+  // @Put('update-admin/:id')
+  // @UsePipes(new ValidationPipe())
+  // updateProfile(
+  //   @Param('id', ParseIntPipe) id: number,
+
+  //   @Body() profileInfo: ValidateAdminProfile,
+  // ) {
+  //   const updated = this.appService.updateAdminEntity(id, profileInfo);
+  //   return {
+  //     updated,
+  //     msg: 'Successfully updated',
+  //   };
+  // }
 
   // Update Admin property
-  @Patch('update-admin-property/:id')
-  // @UsePipes(new ValidationPipe())
-  updateProfileProperty(
-    @Param('id', ParseIntPipe) id: number,
+  // @Patch('update-admin-property/:id')
+  // // @UsePipes(new ValidationPipe())
+  // updateProfileProperty(
+  //   @Param('id', ParseIntPipe) id: number,
 
-    @Body() profileInfo: ValidateAdminProfile,
-  ) {
-    const updated = this.appService.updateAdminEntity(id, profileInfo);
-    return {
-      updated,
-      msg: 'Successfully updated',
-    };
-  }
+  //   @Body() profileInfo: ValidateAdminProfile,
+  // ) {
+  //   const updated = this.appService.updateAdminEntity(id, profileInfo);
+  //   return {
+  //     updated,
+  //     msg: 'Successfully updated',
+  //   };
+  // }
 
   // Upload Admin Photo
   @Post('upload-admin-photo')
@@ -224,7 +235,7 @@ export class AdminController {
     const fileName = file ? file.filename : null;
     const result = { ...profile, imageName: fileName };
 
-    return this.appService.createAdminEntity(result);
+    // return this.appService.createAdminEntity(result);
   }
 
   // Show all Recruiters

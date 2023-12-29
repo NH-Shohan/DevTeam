@@ -51,15 +51,15 @@ export class AdminEntityService {
     });
   }
 
-  // Admin Profile Update
-  async updateAdminEntity(
-    id: number,
-    updatedAdminEntity: ValidateAdminProfile,
-  ): Promise<AdminEntity> {
-    await this.AdminEntityRepository.update(id, updatedAdminEntity);
-    const profile = this.AdminEntityRepository.findOneBy({ id: id });
-    return profile;
-  }
+  // // Admin Profile Update
+  // async updateAdminEntity(
+  //   id: number,
+  //   updatedAdminEntity: ValidateAdminProfile,
+  // ): Promise<AdminEntity> {
+  //   await this.AdminEntityRepository.update(id, updatedAdminEntity);
+  //   const profile = this.AdminEntityRepository.findOneBy({ id: id });
+  //   return profile;
+  // }
 
   async deleteAdminEntity(id: number): Promise<void> {
     await this.AdminEntityRepository.delete(id);
