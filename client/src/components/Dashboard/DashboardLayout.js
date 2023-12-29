@@ -1,8 +1,9 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import Routes from '../Routes/Routes';
 
 export default function DashboardLayout({ children }) {
   const pathname = usePathname();
@@ -23,43 +24,11 @@ export default function DashboardLayout({ children }) {
 
           <hr className="border border-light w-full my-7" />
 
-          <Link
-            href={"/admin"}
-            className={`hover:bg-light hover:font-bold text-gray-light hover:text-black w-full py-2 rounded-lg small text-left pl-4 transition-all ${
-              pathname === "/admin" && "active"
-            }`}
-          >
-            <button>Home</button>
-          </Link>
-          <Link
-            href={"/admin/dashboard"}
-            className={`hover:bg-light hover:font-bold text-gray-light hover:text-black w-full py-2 rounded-lg small text-left pl-4 transition-all ${
-              pathname === "/admin/dashboard" && "active"
-            }`}
-          >
-            <button>dsahboard</button>
-          </Link>
-          <Link href={"/admin/arts"} className="w-full">
-            <button
-              className={`hover:bg-light hover:font-bold text-gray-light hover:text-black w-full py-2 rounded-lg small text-left pl-4 transition-all ${
-                pathname == "/admin/arts" ? "active" : ""
-              }`}
-            >
-              Arts
-            </button>
-          </Link>
-          <Link href={"/admin/users"} className="w-full">
-            <button
-              className={`hover:bg-light hover:font-bold text-gray-light hover:text-black w-full py-2 rounded-lg small text-left pl-4 transition-all ${
-                pathname == "/admin/users" ? "active" : ""
-              }`}
-            >
-              Users
-            </button>
-          </Link>
+          <Routes path="/ProgrammerHome" name={'Home'} />
+          <Routes path="/ProgrammerDashboard" name={'Dashboard'} />
 
           <div className="absolute bottom-0 w-full p-5">
-            <Link href={"/"} className="w-full">
+            <Link href={'/'} className="w-full">
               <button
                 className={`hover:bg-red-light text-red small-bold w-full py-2 rounded-lg small text-left pl-4 transition-all`}
               >
@@ -71,11 +40,11 @@ export default function DashboardLayout({ children }) {
 
         <div className="col-span-9 border border-light rounded-xl h-[60px] flex items-center pl-6">
           <h3>
-            <span className="font-normal">ArtArray - </span>
-            {pathname !== "/admin" ? (
+            <span className="font-normal">DevTeam - </span>
+            {pathname !== '/admin' ? (
               <span>
-                {pathname.split("/admin/")[1]?.charAt(0)?.toUpperCase() +
-                  pathname.split("/admin/")[1]?.slice(1)}
+                {pathname.split('/admin/')[1]?.charAt(0)?.toUpperCase() +
+                  pathname.split('/admin/')[1]?.slice(1)}
               </span>
             ) : (
               <span>Home</span>
