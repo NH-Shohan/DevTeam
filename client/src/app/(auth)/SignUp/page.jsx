@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default function SignUp() {
   return (
     <div className="container mx-auto h-screen w-screen flex justify-center items-center">
-      <div className="bg-light p-10 rounded-xl w-1/3">
+      <div className="bg-secondary p-10 rounded-xl w-1/3">
         <form className="grid grid-cols-1">
           <h2 className="text-center pb-3">Sign up</h2>
 
@@ -15,7 +15,7 @@ export default function SignUp() {
             name="name"
             placeholder="Enter name"
             required
-            className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light"
+            className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light bg-primary focus:border-blue"
           />
 
           <label className="text-gray-light small">Email</label>
@@ -25,7 +25,7 @@ export default function SignUp() {
             name="email"
             placeholder="Enter email"
             required
-            className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light"
+            className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light bg-primary focus:border-blue"
           />
 
           <label className="text-gray-light small">Password</label>
@@ -35,7 +35,7 @@ export default function SignUp() {
             name="password"
             placeholder="Enter password"
             required
-            className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light"
+            className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light bg-primary focus:border-blue"
           />
 
           <label className="text-gray-light small">Confirm Password</label>
@@ -45,7 +45,7 @@ export default function SignUp() {
             name="confirmPassword"
             placeholder="Re-enter password"
             required
-            className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light"
+            className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light bg-primary focus:border-blue"
           />
 
           <h3>
@@ -53,7 +53,7 @@ export default function SignUp() {
           </h3>
           <p>
             Already have an account?
-            <Link className="bold ml-1" href="/signin">
+            <Link className="bold ml-1" href="/SignIn">
               Sign in
             </Link>
           </p>

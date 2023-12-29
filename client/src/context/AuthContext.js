@@ -6,7 +6,12 @@ export const AuthContext = createContext({});
 
 const AuthProvider = ({ children }) => {
   const state = false;
-  return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>;
+  const role = 'recruiter';
+  return (
+    <AuthContext.Provider value={{ state, role }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;

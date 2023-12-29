@@ -35,11 +35,11 @@ h3 {
 }
 
 body {
-  background-color: #fbfbfb;
+  background-color: #03032e;
   font-size: 16px;
   line-height: 22px;
   font-weight: 400;
-  color: #111111;
+  color: #fbfbfb;
 }
 
 .bold {
@@ -67,7 +67,7 @@ body {
 }
 
 .active {
-  background-color: #e7e7e7;
-  color: #111111;
+  background-color: #3333bd44;
+  color: #fbfbfb;
   font-weight: 700;
 }
