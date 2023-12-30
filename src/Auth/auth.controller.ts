@@ -6,15 +6,17 @@ import {
   Res,
   UseGuards,
   Get,
-  Request,
+  // Request,
   Param,
+  Req,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { AdminEntityService } from 'src/Admin/admin.service';
 import { RecruiterEntityService } from 'src/Recruiter/recruiter.service';
 import { CompanyService } from 'src/company/company.service';
 import { ProfileService } from 'src/programmer/profile/profile.service';
+import { SessionGuard } from 'src/Admin/session.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -39,6 +41,12 @@ export class AuthController {
     );
 
     if (passwordMatch) {
+      // Set the cookies in the response
+      res.cookie('connect.sid', session.cookie, {
+        httpOnly: true,
+        secure: false,
+      });
+
       // Return the session to the frontend
       return res
         .status(200)
@@ -48,13 +56,16 @@ export class AuthController {
     }
   }
 
-  // @UseGuards()
   @Get('get-user/:email')
-  async getProfile(@Param('email') email: string) {
+  @UseGuards(SessionGuard)
+  async getProfile(@Param('email') email: string, @Req() req: Request) {
     // const { email } = req.user;
 
     // Check if the email exists in any of the tables and fetch the profile
+
+    console.log({ reqData: req });
     const adminProfile = await this.authService.getAdminProfileByEmail(email);
+
     if (adminProfile) {
       return adminProfile;
     }
@@ -78,5 +89,27 @@ export class AuthController {
     }
 
     return null; // No matching profile found
+  }
+
+  @Post('logout')
+  async logout(
+    @Session() session: Record<string, any>,
+    @Res() res: Response,
+  ): Promise<any> {
+    if (session) {
+      // Destroy the session on the server side
+      session.destroy((err) => {
+        if (err) {
+          console.error('Error destroying session:', err);
+        }
+      });
+
+      // Clear the session cookie on the client side
+      res.clearCookie('connect.sid');
+
+      return res.status(200).json({ success: true });
+    } else {
+      return res.status(400).json({ message: 'No active session to logout' });
+    }
   }
 }

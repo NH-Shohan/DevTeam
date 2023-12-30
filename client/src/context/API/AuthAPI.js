@@ -22,12 +22,8 @@ const useAuthAPI = () => {
         password,
       });
 
-      //   document.cookie = `session=${JSON.parse(
-      //     response.data.session,
-      //   )}; expires=${response.data.session.cookie.expires}; path=/`;
-      Cookies.set('session', JSON.stringify(response.data.session), {
-        expires: 86400,
-      });
+      console.log('getting backend daata', response.data);
+
       login(response.data.role, response.data.session);
 
       return response.data.session;
@@ -38,9 +34,16 @@ const useAuthAPI = () => {
     }
   };
 
-  const logoutUser = () => {
-    // router.push('/');
-    logout();
+  const logoutUser = async () => {
+    try {
+      // Call the backend logout endpoint
+      await axiosInstance.post('/auth/logout');
+
+      // Logout on the frontend
+      logout();
+    } catch (error) {
+      console.error('Error logging out:', error.message);
+    }
   };
 
   return { loading, error, loginUser, logoutUser };
