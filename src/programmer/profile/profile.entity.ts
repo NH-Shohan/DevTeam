@@ -1,46 +1,63 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Generated,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { CertificationEntity } from '../certifications/certification.entity';
+import { UsersEntity } from 'src/Relation/user.entity';
 
 @Entity('ProgrammerProfile')
 export class ProfileEntity {
-  @PrimaryGeneratedColumn()
+  @Generated()
   id: number;
 
-  @Column({ name: 'Full Name' })
+  @Column()
   name: string;
 
-  @Column({ name: 'Email Address' })
+  @PrimaryColumn()
   email: string;
 
-  @Column({ name: 'Password' })
+  @Column()
   password: string;
 
-  @Column({ name: 'GitHub Username' })
+  @Column()
   gitHubUsername: string;
 
-  @Column({ name: 'Profile Picture' })
-  profilePicture: string;
+  @Column({ nullable: true })
+  imageName: string | null;
 
-  @Column({ name: 'Biography' })
+  @Column()
+  photo: string;
+
+  @Column()
   bio: string;
 
-  @Column({ name: 'Contact Information' })
+  @Column()
   contactInformation: string;
 
-  @Column({ name: 'Location' })
+  @Column()
   location: string;
 
-  @Column({ name: 'Social Media Links' })
+  @Column()
   socialMediaLinks: string;
 
-  @Column({ name: 'Education' })
+  @Column()
   education: string;
 
-  @Column({ name: 'Projects' })
+  @Column()
   projects: string;
 
-  @Column({ name: 'Work Experiences' })
+  @Column()
   experiences: number;
+
+  @ManyToOne(() => UsersEntity, (user) => user.email, { cascade: true })
+  @JoinColumn({ name: 'email' })
+  user: UsersEntity;
 
   @OneToMany(() => CertificationEntity, (profile) => profile.certificate)
   profile: CertificationEntity[];

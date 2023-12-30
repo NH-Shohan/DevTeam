@@ -33,7 +33,7 @@ export class ProfileController {
   // Create Programmer Profile
   @Post('profile')
   @UseInterceptors(
-    FileInterceptor('profilePicture', {
+    FileInterceptor('imageName', {
       fileFilter: (_req, file, cb) => {
         if (file.originalname.match(/^.*\.(jpg|png|jpeg)$/)) cb(null, true);
         else {
@@ -51,14 +51,14 @@ export class ProfileController {
   )
   @UsePipes(new ValidationPipe())
   createProfile(
-    @Session() session,
+    // @Session() session,
     @UploadedFile() file: Express.Multer.File,
     @Body() profileInfo: ProfileDTO,
   ) {
     try {
-      session.email = profileInfo.email;
+      // session.email = profileInfo.email;
       const fileName = file ? file.filename : null;
-      const result = { ...profileInfo, profilePicture: fileName };
+      const result = { ...profileInfo, imageName: fileName };
       return this.profileService.createUser(result);
     } catch (error) {
       throw new HttpException(
@@ -160,7 +160,7 @@ export class ProfileController {
   async getProfilePicture(@Param('id') id, @Res() res) {
     try {
       const profile = await this.profileService.getProfileById(id);
-      res.sendFile(profile.profilePicture, {
+      res.sendFile(profile.imageName, {
         root: './src/programmer/profile/ProfilePics',
       });
     } catch (error) {

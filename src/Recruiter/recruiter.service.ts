@@ -1,13 +1,14 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm'; // change this to your entity class
+import { QueryFailedError, Repository } from 'typeorm'; // change this to your entity class
 import { ValidateRecruiterProfile } from './recruiter.dto';
 import {
   CandidateEntity,
   InterviewEntity,
   RecruiterEntity,
 } from './recruiter.entity';
+import { UsersEntity } from 'src/Relation/user.entity';
 @Injectable()
 export class RecruiterEntityService {
   constructor(
@@ -17,14 +18,38 @@ export class RecruiterEntityService {
     private interviewRepository: Repository<InterviewEntity>,
     @InjectRepository(CandidateEntity)
     private candidateRepository: Repository<CandidateEntity>,
+    @InjectRepository(UsersEntity)
+    private UsersEntityRepository: Repository<UsersEntity>,
   ) {}
 
   // RecruiterEntityRepository is the local repository
   async createRecruiterEntity(
-    Profile: RecruiterEntity,
+    recruiterEntity: RecruiterEntity,
   ): Promise<RecruiterEntity> {
-    return this.RecruiterEntityRepository.save(Profile);
+    // Check if the email already exists in the users table
+    const existingUser = await this.UsersEntityRepository.findOne({
+      where: { email: recruiterEntity.email },
+    });
+
+    if (existingUser) {
+      throw new Error('Email address is already in use');
+    }
+
+    // If the email doesn't exist, proceed to create recruiter and user entities
+    const recruiter = this.RecruiterEntityRepository.create(recruiterEntity);
+
+    const user = new UsersEntity();
+    user.email = recruiterEntity.email;
+    user.role = 'recruiter';
+
+    recruiter.user = user;
+
+    // Save both recruiter and user entities
+    await this.RecruiterEntityRepository.save(recruiter);
+
+    return recruiter;
   }
+
   async getAllRecruiterEntitys(): Promise<RecruiterEntity[]> {
     return this.RecruiterEntityRepository.find();
   }
@@ -69,7 +94,7 @@ export class RecruiterEntityService {
       throw new Error('Error fetching candidates');
     }
   }
-  
+
   async getCandidates(): Promise<CandidateEntity[]> {
     try {
       return await this.candidateRepository.find();

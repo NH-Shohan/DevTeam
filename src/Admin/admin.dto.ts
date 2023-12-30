@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { IsEmail, IsString, Length, Matches, MaxLength } from 'class-validator';
+import { UsersEntity } from 'src/Relation/user.entity';
 
 export class ValidateAdminProfile {
   id: number;
@@ -44,6 +45,7 @@ export class ValidateAdminProfile {
   role: 'executive' | 'moderator';
 
   permissions: ('creating' | 'adding' | 'deleting')[];
+  user: UsersEntity;
 }
 
 export class ValidateModeratorProfile {
@@ -71,29 +73,6 @@ export class ValidateModeratorProfile {
   password: string;
 
   imageName: string;
-}
 
-export class ValidateAdminRecruiterProfile {
-  id: number;
-
-  @IsString()
-  @Matches(/^[A-Za-z]+$/, {
-    message: 'Name must be string',
-  })
-  @MaxLength(30)
-  name: string;
-
-  @IsEmail()
-  email: string;
-
-  @Length(2, 30, {
-    message: 'Length can not be less than 2 and more than 30 character.',
-  })
-  @Matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/, {
-    message:
-      'Password must be minimum 8 characters, at least one letter, one number and one special character',
-  })
-  password: string;
-
-  status: string;
+  user: UsersEntity;
 }

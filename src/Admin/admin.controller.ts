@@ -21,17 +21,11 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { MulterError, diskStorage } from 'multer';
-import {
-  ValidateAdminProfile,
-  ValidateAdminRecruiterProfile,
-  ValidateModeratorProfile,
-} from './admin.dto';
-import { AdminEntityService } from './admin.service';
+import { ValidateAdminProfile, ValidateModeratorProfile } from './admin.dto';
 import { SessionGuard } from './session.guard';
-import { AdminRecruiterEntityService } from './adminRecruiterEntity.service';
-import { AdminRecruiterEntity } from './adminRecruiter.entity';
 import { GrowthEntityService } from './gowth.service';
 import { GrowthEntity } from './growth.entity';
+import { AdminEntityService } from './admin.service';
 
 // const recruiters = [];
 const companies = [];
@@ -44,7 +38,6 @@ const users = [];
 export class AdminController {
   constructor(
     private appService: AdminEntityService,
-    private recruiterService: AdminRecruiterEntityService,
     private growthService: GrowthEntityService,
   ) {}
 
@@ -82,7 +75,7 @@ export class AdminController {
     @Body() profile: ValidateAdminProfile,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log(profile);
+    // console.log(profile);
     // You can now use both 'profile' and 'file' to create the admin entity
     const fileName = file ? file.filename : null;
     const result = { ...profile, imageName: fileName };
@@ -239,37 +232,31 @@ export class AdminController {
   }
 
   // Show all Recruiters
-  @Get('get-recruiters')
-  getViewRecruiter(): any {
-    return this.recruiterService.getAllRecruiterEntitys();
-  }
+  // @Get('get-recruiters')
+  // getViewRecruiter(): any {
+  //   return this.recruiterService.getAllRecruiterEntitys();
+  // }
 
   // Show all Recruiters
-  // creates
-  @Post('create-recruiter')
-  @UsePipes(new ValidationPipe())
-  createRecruiter(@Body() profile: ValidateAdminRecruiterProfile) {
-    return this.recruiterService.createRecruiterEntity(profile);
-  }
 
-  @Patch('approve-recruiters/:id')
-  @UsePipes(new ValidationPipe())
-  approveRecruiters(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() profile: AdminRecruiterEntity,
-  ): any {
-    return this.recruiterService.updateRecruiterEntity(id, profile);
-  }
+  // @Patch('approve-recruiters/:id')
+  // @UsePipes(new ValidationPipe())
+  // approveRecruiters(
+  //   @Param('id', ParseIntPipe) id: number,
+  //   @Body() profile: AdminRecruiterEntity,
+  // ): any {
+  //   return this.recruiterService.updateRecruiterEntity(id, profile);
+  // }
 
-  @Delete('reject-recruiters/:id')
-  rejectRecruiters(@Param('id') id): any {
-    try {
-      this.recruiterService.deleteRecruiterEntity(id);
-    } catch (error) {
-      console.log(error);
-    }
-    return { msg: 'Deleted Successfully' };
-  }
+  // @Delete('reject-recruiters/:id')
+  // rejectRecruiters(@Param('id') id): any {
+  //   try {
+  //     this.recruiterService.deleteRecruiterEntity(id);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   return { msg: 'Deleted Successfully' };
+  // }
 
   @Get('companies')
   getCompanies(): any {

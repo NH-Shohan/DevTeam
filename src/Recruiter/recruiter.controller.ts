@@ -43,7 +43,7 @@ export class RecruiterController {
   @Post('create-recruiter')
   @UsePipes(new ValidationPipe())
   @UseInterceptors(
-    FileInterceptor('image', {
+    FileInterceptor('imageName', {
       fileFilter: (req, file, cb) => {
         if (file.originalname.match(/^.*\.(jpg|png|jpeg)$/)) cb(null, true);
         else {
@@ -67,8 +67,8 @@ export class RecruiterController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     try {
-      const fileName = file.filename;
-      const result = { ...profile, image: fileName };
+      const fileName = file ? file.filename : null;
+      const result = { ...profile, imageName: fileName };
 
       return this.appService.createRecruiterEntity(result);
     } catch (error) {
@@ -132,7 +132,7 @@ export class RecruiterController {
   async getProfilePicture(@Param('id') id, @Res() res) {
     try {
       const profile = await this.appService.getRecruiterEntityById(id);
-      res.sendFile(profile.image, {
+      res.sendFile(profile.imageName, {
         root: './uploads',
       });
     } catch (error) {

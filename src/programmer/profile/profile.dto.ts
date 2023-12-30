@@ -10,14 +10,15 @@ import {
   MaxLength,
 } from 'class-validator';
 import { CertificationEntity } from '../certifications/certification.entity';
+import { UsersEntity } from 'src/Relation/user.entity';
 
 export class ProfileDTO {
   id: number;
 
   @IsNotEmpty()
   @IsString()
-  @Matches(/^[A-Za-z]+$/, {
-    message: 'Name must be string',
+  @Length(4, 30, {
+    message: 'Name must be between 4 and 30 characters',
   })
   name: string;
 
@@ -38,7 +39,10 @@ export class ProfileDTO {
   @IsLowercase()
   gitHubUsername: string;
 
-  profilePicture: string;
+  imageName: string;
+
+  // Ensure to match the DTO with the form structure
+  photo: string;
 
   @IsNotEmpty()
   @MaxLength(2000)
@@ -69,4 +73,6 @@ export class ProfileDTO {
   experiences: number;
 
   profile: CertificationEntity[];
+
+  user: UsersEntity;
 }

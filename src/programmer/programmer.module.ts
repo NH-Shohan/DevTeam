@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CertificationsModule } from './certifications/certification.module';
 import { ExperienceModule } from './experience/experience.module';
-import { ProfileModule } from './profile/profile.module';
 import { ProjectModule } from './project/project.module';
 import { SearchModule } from './search/search.module';
 import { TeamInfoModule } from './team-info/team-info.module';
@@ -11,7 +10,6 @@ import { TeamInfoModule } from './team-info/team-info.module';
     ExperienceModule,
     ProjectModule,
     TeamInfoModule,
-    ProfileModule,
     CertificationsModule,
     SearchModule,
   ],

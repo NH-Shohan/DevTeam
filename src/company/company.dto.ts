@@ -1,9 +1,7 @@
-// create-recruiter.dto.ts
-import { IsString, IsEmail, Length, Matches } from 'class-validator';
-import { UsersEntity } from 'src/Relation/user.entity';
+// create-company.dto.ts
+import { IsString, IsEmail, Length } from 'class-validator';
 
-export class ValidateRecruiterProfile {
-  id: number;
+export class CreateCompanyDTO {
   @IsString()
   @Length(4, 30, {
     message: 'Name must be between 4 and 30 characters',
@@ -22,21 +20,18 @@ export class ValidateRecruiterProfile {
   @Length(8, undefined, {
     message: 'Password must be at least 8 characters',
   })
-  @Matches(/^(?=.*[A-Z])/i, {
-    message: 'Password must contain at least 1 uppercase letter',
-  })
   password: string;
 
   imageName: string; // Assuming it's a FileList, adjust as needed
 
   photo: string; // Assuming it's a FileList, adjust as needed
 
-  expertiseSkills: string[];
-
-  projectLinks: string[];
+  @IsString()
+  ownerName: string;
 
   @IsString()
-  linkedInLink: string;
+  licenseNo: string;
 
-  user: UsersEntity;
+  @IsString()
+  ownerNID: string;
 }

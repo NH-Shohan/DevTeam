@@ -1,47 +1,71 @@
 /* eslint-disable prettier/prettier */
-import { ProfileEntity } from 'src/programmer/profile/profile.entity';
+
+import { UsersEntity } from 'src/Relation/user.entity';
 import {
   Column,
   Entity,
+  Generated,
   JoinColumn,
-  OneToOne,
+  ManyToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 
 @Entity('recruiter')
+@Unique(['email'])
 export class RecruiterEntity {
-  @PrimaryGeneratedColumn()
+  @Generated()
   id: number;
+
   @Column()
   name: string;
+
   @Column()
+  username: string;
+
+  @PrimaryColumn()
   email: string;
+
   @Column()
   password: string;
+
+  @Column({ nullable: true })
+  imageName: string | null;
+
   @Column()
-  image: string;
+  photo: string;
+
+  @Column('simple-array', { default: [] })
+  expertiseSkills: string[];
+
+  @Column('simple-array', { default: [] })
+  projectLinks: string[];
+
+  @Column()
+  linkedInLink: string;
+
+  @ManyToOne(() => UsersEntity, (user) => user.email, { cascade: true })
+  @JoinColumn({ name: 'email' })
+  user: UsersEntity;
 }
 
-@Entity('Interview_Unfinished')
-export class InterviewEntityError {
-  @PrimaryGeneratedColumn()
-  id: number;
-  @OneToOne(
-    () => ProfileEntity,
-    (candidateProfile) => candidateProfile.email,
-    {
-      cascade: true,
-    },
-  )
-  @JoinColumn()
-  candidateProfile: ProfileEntity;
+// @Entity('Interview_Unfinished')
+// export class InterviewEntityError {
+//   @PrimaryGeneratedColumn()
+//   id: number;
+//   @OneToOne(() => ProfileEntity, (candidateProfile) => candidateProfile.email, {
+//     cascade: true,
+//   })
+//   @JoinColumn()
+//   candidateProfile: ProfileEntity;
 
-  @Column()
-  date: string;
+//   @Column()
+//   date: string;
 
-  @Column()
-  googleMeetLink: string;
-}
+//   @Column()
+//   googleMeetLink: string;
+// }
 
 @Entity('Interview')
 export class InterviewEntity {

@@ -5,26 +5,41 @@ import { Repository } from 'typeorm';
 import { ProfileDTO } from './profile.dto';
 import { ProfileEntity } from './profile.entity';
 import { UpdatePasswordDTO } from './update-password.dto';
+import { UsersEntity } from 'src/Relation/user.entity';
 
 @Injectable()
 export class ProfileService {
   constructor(
     @InjectRepository(ProfileEntity)
     private profileRepository: Repository<ProfileEntity>,
+    @InjectRepository(UsersEntity)
+    private UsersEntityRepository: Repository<UsersEntity>,
   ) {}
 
   //    Post profile Information
   async createUser(programmerProfile: ProfileEntity): Promise<ProfileEntity> {
-    try {
-      const password = programmerProfile.password;
-      const salt = await bcrypt.genSalt();
-      const hashedPassword = await bcrypt.hash(password, salt);
+    // Check if the email already exists in the users table
+    const existingUser = await this.UsersEntityRepository.findOne({
+      where: { email: programmerProfile.email },
+    });
 
-      programmerProfile.password = hashedPassword;
-      return this.profileRepository.save(programmerProfile);
-    } catch (error) {
-      throw error;
+    if (existingUser) {
+      throw new Error('Email address is already in use');
     }
+
+    // If the email doesn't exist, proceed to create programmer and user entities
+    const programmer = this.profileRepository.create(programmerProfile);
+
+    const user = new UsersEntity();
+    user.email = programmerProfile.email;
+    user.role = 'programmer';
+
+    programmer.user = user;
+
+    // Save both programmer and user entities
+    await this.profileRepository.save(programmer);
+
+    return programmer;
   }
 
   //   Get all profile Information
