@@ -7,7 +7,7 @@ export default function Table({ columns, data }) {
         <div class="inline-block min-w-full py-2 sm:px-6 lg:px-8">
           <div class="overflow-hidden">
             <table class="min-w-full text-left text-sm font-light table-auto">
-              <thead class="border-b small-bold border-light">
+              <thead class="border-b small-bold border-blue">
                 <tr>
                   {columns.map((column, index) => (
                     <th key={index} scope="col" class="px-6 py-1">
@@ -20,7 +20,7 @@ export default function Table({ columns, data }) {
                 {data.map((row, rowIndex) => (
                   <tr
                     key={rowIndex}
-                    class="border-b transition duration-200 ease-in-out hover:bg-light border-light"
+                    class="border-b transition duration-200 ease-in-out hover:bg-[#3333bd16] border-blue"
                   >
                     {columns.map((column, colIndex) => (
                       <td key={colIndex} class="whitespace-nowrap px-6 py-4">

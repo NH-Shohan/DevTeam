@@ -1,18 +1,26 @@
-import { Roboto_Slab } from 'next/font/google';
+import AuthProvider from '@/context/AuthContext';
+import { Glegoo } from 'next/font/google';
 import './globals.css';
 
-const roboto_Slab = Roboto_Slab({ subsets: ['latin'] });
+const glegoo = Glegoo({ subsets: ['latin'], weight: ['400', '700'] });
 
 export const metadata = {
   title: 'DevTeam',
   description: 'Developer Team',
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout(props) {
   return (
     <html lang="en">
-      <body className={`${roboto_Slab.className} container mx-auto`}>
-        {children}
+      <body className={`${glegoo.className} container mx-auto`}>
+        <AuthProvider
+          admin={props.admin}
+          programmer={props.programmer}
+          company={props.company}
+          recruiter={props.recruiter}
+        >
+          {props.children}
+        </AuthProvider>
       </body>
     </html>
   );

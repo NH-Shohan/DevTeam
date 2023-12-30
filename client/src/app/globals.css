@@ -2,20 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 h1 {
   font-size: 64px;
   line-height: 74px;
@@ -35,11 +21,11 @@ h3 {
 }
 
 body {
-  background-color: #fbfbfb;
+  background-color: #03032e;
   font-size: 16px;
   line-height: 22px;
   font-weight: 400;
-  color: #111111;
+  color: #fbfbfb;
 }
 
 .bold {
@@ -67,7 +53,7 @@ body {
 }
 
 .active {
-  background-color: #e7e7e7;
-  color: #111111;
+  background-color: #3333bd44;
+  color: #fbfbfb;
   font-weight: 700;
 }

@@ -6,7 +6,7 @@ function Routes({ name, path }) {
   return (
     <Link
       href={path ? path : ''}
-      className={`hover:bg-light hover:font-bold text-gray-light hover:text-black w-full py-2 rounded-lg small text-left pl-4 transition-all ${
+      className={`hover:bg-[#3333bd44] hover:font-bold text-light hover:text-white w-full py-3 rounded-lg small text-left pl-4 transition-all ${
         pathname === path && 'active'
       }`}
     >
