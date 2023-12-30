@@ -40,9 +40,9 @@ export class AvailableJobsEntity {
   @Column('simple-array', { default: [] })
   requiredSkills: string[];
 
-  @ManyToMany(() => RecruiterEntity, (recruiter) => recruiter.email, {
+  @ManyToOne(() => RecruiterEntity, (recruiter) => recruiter.email, {
     eager: true,
   })
   @JoinTable()
-  interviewers: RecruiterEntity[];
+  interviewer: RecruiterEntity;
 }

@@ -16,12 +16,18 @@ import { CreateCompanyDTO } from './company.dto';
 import { MulterError, diskStorage } from 'multer';
 import { CreateAvailableJobsDTO } from './jobs.dto';
 import { AvailableJobsService } from './jobs.service';
+import { AppliedJobsEntity } from 'src/Recruiter/applied_jobs.entity';
+import { AppliedJobsService } from 'src/Recruiter/Jobs/applied_jobs.service';
+import { InterviewListEntity } from 'src/Recruiter/interview_list.entity';
+import { InterviewListService } from 'src/Recruiter/Jobs/interview-list.service';
 
 @Controller('company')
 export class CompanyController {
   constructor(
     private readonly companyService: CompanyService,
     private readonly availableJobsService: AvailableJobsService,
+    private readonly appliedJobsService: AppliedJobsService,
+    private readonly interviewListService: InterviewListService,
   ) {}
 
   @Post('create-company')
@@ -78,5 +84,20 @@ export class CompanyController {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  // Jobs
+  @Post('applied-job')
+  async createAppliedJob(
+    @Body() appliedJobData: Partial<AppliedJobsEntity>,
+  ): Promise<AppliedJobsEntity> {
+    return this.appliedJobsService.createAppliedJob(appliedJobData);
+  }
+
+  @Post('interview-list')
+  async createInterviewList(
+    @Body() interviewListData: Partial<InterviewListEntity>,
+  ): Promise<InterviewListEntity> {
+    return this.interviewListService.createInterviewList(interviewListData);
   }
 }

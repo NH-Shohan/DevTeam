@@ -7,6 +7,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { FaRegEye } from 'react-icons/fa';
 import { FaEyeSlash } from 'react-icons/fa6';
 
+import { toast, ToastContainer } from 'react-toastify';
+
 const CreateAdmin = () => {
   const {
     control,
@@ -19,6 +21,26 @@ const CreateAdmin = () => {
   const [previewImage, setPreviewImage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [fileStore, setFileStore] = useState(null);
+
+  const notify = (event) => {
+    console.log(event);
+    if (event === 'success') {
+      toast.success('Successfully Created!!', {
+        position: toast.POSITION.TOP_RIGHT,
+        className: 'foo-bar',
+      });
+    } else if (event.response.statusText === 'Internal Server Error') {
+      toast.error('Duplicate Email Detected!', {
+        position: toast.POSITION.TOP_RIGHT,
+        className: 'foo-bar',
+      });
+    } else {
+      toast.error('There was an error!', {
+        position: toast.POSITION.TOP_RIGHT,
+        className: 'foo-bar',
+      });
+    }
+  };
 
   const onSubmit = async (data) => {
     const {
@@ -134,8 +156,11 @@ const CreateAdmin = () => {
         formData,
       );
       console.log('API Response:', response);
+
+      notify('success');
     } catch (error) {
       console.error('API Error:', error.response || error);
+      notify(error);
     }
   };
 

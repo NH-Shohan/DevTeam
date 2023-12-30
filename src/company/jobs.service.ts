@@ -21,7 +21,7 @@ export class AvailableJobsService {
   async createAvailableJobsEntity(
     availableJobsDTO: CreateAvailableJobsDTO,
   ): Promise<AvailableJobsEntity> {
-    const { company_email, interviewers, ...rest } = availableJobsDTO;
+    const { company_email, interviewer, ...rest } = availableJobsDTO;
 
     const company = await this.companyRepository.findOne({
       where: { email: company_email },
@@ -30,15 +30,14 @@ export class AvailableJobsService {
       throw new NotFoundException('Company not found');
     }
 
-    const interviewersEntities = await this.recruiterEntityRepository
-      .createQueryBuilder('recruiter')
-      .where('recruiter.email IN (:...interviewers)', { interviewers })
-      .getMany();
+    const interviewerEmail = await this.recruiterEntityRepository.findOne({
+      where: { email: interviewer },
+    });
 
     const availableJobsEntity = this.availableJobsRepository.create({
       ...rest,
       company,
-      interviewers: interviewersEntities,
+      interviewer: interviewerEmail,
     });
 
     return this.availableJobsRepository.save(availableJobsEntity);

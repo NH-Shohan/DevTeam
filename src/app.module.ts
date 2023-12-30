@@ -31,6 +31,10 @@ import { ProfileController } from './programmer/profile/profile.controller';
 import { ProfileService } from './programmer/profile/profile.service';
 import { AuthController } from './Auth/auth.controller';
 import { AuthService } from './Auth/auth.service';
+import { InterviewListEntity } from './Recruiter/interview_list.entity';
+import { AppliedJobsEntity } from './Recruiter/applied_jobs.entity';
+import { AppliedJobsService } from './Recruiter/Jobs/applied_jobs.service';
+import { InterviewListService } from './Recruiter/Jobs/interview-list.service';
 
 @Module({
   imports: [
@@ -60,6 +64,10 @@ import { AuthService } from './Auth/auth.service';
 
       // programmer
       ProfileEntity,
+
+      // Interview
+      AppliedJobsEntity,
+      InterviewListEntity,
     ]),
     // GlobalModule,
     // AdminModule,
@@ -92,6 +100,10 @@ import { AuthService } from './Auth/auth.service';
 
     // login
     AuthService,
+
+    // interview
+    AppliedJobsService,
+    InterviewListService,
   ],
 })
 export class AppModule {}

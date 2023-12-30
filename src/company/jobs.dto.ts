@@ -32,6 +32,6 @@ export class CreateAvailableJobsDTO {
   @IsEmail()
   company_email: string; // Make sure to validate that it's an email
 
-  @ArrayNotEmpty()
-  interviewers: string[]; // Assuming it's an array of recruiter emails
+  @IsEmail()
+  interviewer: string; // Assuming it's an array of recruiter emails
 }

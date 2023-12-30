@@ -8,6 +8,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { FaRegEye } from 'react-icons/fa';
 import { FaEyeSlash } from 'react-icons/fa6';
 
+import { toast, ToastContainer } from 'react-toastify';
+
 const CreateRecruiter = () => {
   const {
     control,
@@ -32,6 +34,26 @@ const CreateRecruiter = () => {
       projectLinks,
       linkedInLink,
     } = data;
+
+    const notify = (event) => {
+      console.log(event);
+      if (event === 'success') {
+        toast.success('Successfully Created!!', {
+          position: toast.POSITION.TOP_RIGHT,
+          className: 'foo-bar',
+        });
+      } else if (event.response.statusText === 'Internal Server Error') {
+        toast.error('Duplicate Email Detected!', {
+          position: toast.POSITION.TOP_RIGHT,
+          className: 'foo-bar',
+        });
+      } else {
+        toast.error('There was an error!', {
+          position: toast.POSITION.TOP_RIGHT,
+          className: 'foo-bar',
+        });
+      }
+    };
 
     if (name.length < 4) {
       setError('name', {
@@ -104,8 +126,11 @@ const CreateRecruiter = () => {
         formData,
       );
       console.log('API Response:', response);
+
+      notify('success');
     } catch (error) {
       console.error('API Error:', error.response || error);
+      notify(error);
     }
   };
 
