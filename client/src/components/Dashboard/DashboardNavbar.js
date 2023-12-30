@@ -1,10 +1,9 @@
 'use client';
+import useAuthAPI from '@/context/API/AuthAPI';
+import { AuthContext } from '@/context/AuthContext';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useContext } from 'react';
 import Routes from '../Routes/Routes';
-import { AuthContext } from '@/context/AuthContext';
-import useAuthAPI from '@/context/API/AuthAPI';
 
 function DashboardNavbar() {
   const context = useContext(AuthContext);
@@ -27,9 +26,10 @@ function DashboardNavbar() {
         <>
           <Routes path="/" name={'Home'} />
           <Routes path="/CreateAdmin" name={'Create Admin'} />
+          <Routes path="/AllAdmin" name={'All Admin'} />
+          <Routes path="/AllCompany" name={'All Company'} />
+          <Routes path="/AllDeveloper" name={'All Developer'} />
           <Routes path="/CreateRecruiter" name={'Create Recruiter'} />
-          <Routes path="/DeleteCompany" name={'Delete Company'} />
-          <Routes path="/DeleteDeveloper" name={'Delete Developer'} />
         </>
       ) : context.role === 'programmer' ? (
         <>
