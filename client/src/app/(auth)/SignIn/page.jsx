@@ -1,14 +1,16 @@
 'use client';
-
+// SignIn.js
 import Button from '@/components/Button/Button';
-import { AuthContext } from '@/context/AuthContext';
+import useAuthAPI from '@/context/API/AuthAPI';
+import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 
 export default function SignIn() {
   const router = useRouter();
-  const context = useContext(AuthContext);
+  const { login } = useAuth();
+  const { loading, error, loginUser } = useAuthAPI();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,35 +23,9 @@ export default function SignIn() {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (
-      email === 'dev@gmail.com' &&
-      password === '123456' &&
-      context.role === 'programmer'
-    ) {
-      router.replace('/ProgrammerHome');
-    } else if (
-      email === 'dev@admin.com' &&
-      password === '123456' &&
-      context.role === 'admin'
-    ) {
-      router.replace('/AdminHome');
-    } else if (
-      email === 'dev@gmail.com' &&
-      password === '123456' &&
-      context.role === 'company'
-    ) {
-      router.replace('/CompanyHome');
-    } else if (
-      email === 'dev@gmail.com' &&
-      password === '123456' &&
-      context.role === 'recruiter'
-    ) {
-      router.replace('/RecruiterHome');
-    } else {
-      console.log('Invalid email or password');
-    }
+    await loginUser(email, password);
   };
 
   return (
@@ -85,8 +61,11 @@ export default function SignIn() {
             text="Sign in"
             fill
             onClick={handleSubmit}
+            disabled={loading}
           />
         </h3>
+
+        {error && <p className="text-red">{error}</p>}
 
         <p>
           Already have an account?

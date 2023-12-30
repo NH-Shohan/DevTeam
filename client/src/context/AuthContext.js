@@ -1,21 +1,69 @@
+// AuthContext.js
 'use client';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-import { createContext } from 'react';
-
+import { redirect, usePathname, useRouter } from 'next/navigation';
+import path from 'path';
+import Cookies from 'js-cookie';
 export const AuthContext = createContext({});
 
-const AuthProvider = ({ children, admin, programmer, company, recruiter }) => {
-  const state = true;
-  const role = 'programmer';
+export const AuthProvider = ({
+  children,
+  admin,
+  programmer,
+  company,
+  recruiter,
+}) => {
+  const router = useRouter();
+  const pathname = usePathname();
+  const [state, setState] = useState(() => {
+    const storedState = localStorage.getItem('authState');
+    return storedState
+      ? JSON.parse(storedState)
+      : { isAuthenticated: false, role: '', session: null };
+  });
+  console.log(pathname);
+  useEffect(() => {
+    if (!state?.session || !state?.isAuthenticated) {
+      router.push('/'); // Redirect to login page after logout
+      //  // Redirect to login page after logout
+      // if (pathname !== '/') {
+      //   redirect('/');
+      // }
+    }
+  }, [state, router, pathname]);
+
+  console.log({ 'shohaner heda': state });
+
+  useEffect(() => {
+    localStorage.setItem('authState', JSON.stringify(state));
+  }, [state]);
+
+  const login = (role, session) => {
+    setState({ isAuthenticated: true, role, session });
+  };
+
+  const logout = () => {
+    Cookies.remove('session');
+    setState({ isAuthenticated: false, role: '', session: null });
+    // router.push('/');
+  };
+
   return (
-    <AuthContext.Provider value={{ state, role }}>
-      {role === '' && children}
-      {role === 'admin' && admin}
-      {role === 'programmer' && programmer}
-      {role === 'company' && company}
-      {role === 'recruiter' && recruiter}
+    <AuthContext.Provider value={{ ...state, login, logout }}>
+      {!state.isAuthenticated && children}
+      {state.role === 'admin' && state.isAuthenticated && admin}
+      {state.role === 'programmer' && state.isAuthenticated && programmer}
+      {state.role === 'company' && state.isAuthenticated && company}
+      {state.role === 'recruiter' && state.isAuthenticated && recruiter}
     </AuthContext.Provider>
   );
 };
 
-export default AuthProvider;
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};

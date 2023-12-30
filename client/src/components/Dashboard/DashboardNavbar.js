@@ -1,13 +1,14 @@
 'use client';
-import { AuthContext } from '@/context/AuthContext';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useContext } from 'react';
 import Routes from '../Routes/Routes';
+import { AuthContext } from '@/context/AuthContext';
+import useAuthAPI from '@/context/API/AuthAPI';
 
 function DashboardNavbar() {
   const context = useContext(AuthContext);
-
+  const { logoutUser } = useAuthAPI();
   return (
     <div className="p-5 col-span-3 row-span-2 border border-blue rounded-xl flex flex-col items-center relative bg-secondary">
       <Image
@@ -64,13 +65,14 @@ function DashboardNavbar() {
       ) : null}
 
       <div className="absolute bottom-0 w-full p-5">
-        <Link href={'/'} className="w-full">
+        <span className="w-full">
           <button
+            onClick={logoutUser}
             className={`hover:bg-red-light text-red bold w-full py-4 rounded-lg text-left pl-4 transition-all`}
           >
             Logout
           </button>
-        </Link>
+        </span>
       </div>
     </div>
   );

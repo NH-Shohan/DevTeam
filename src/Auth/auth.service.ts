@@ -72,6 +72,7 @@ export class AuthService {
       passwordMatch = true;
     }
 
+    console.log(session);
     return passwordMatch;
   }
 }

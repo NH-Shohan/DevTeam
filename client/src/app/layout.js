@@ -1,6 +1,6 @@
-import AuthProvider from '@/context/AuthContext';
 import { Glegoo } from 'next/font/google';
 import './globals.css';
+import { AuthProvider } from '@/context/AuthContext';
 
 const glegoo = Glegoo({ subsets: ['latin'], weight: ['400', '700'] });
 
