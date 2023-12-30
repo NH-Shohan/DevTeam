@@ -17,7 +17,7 @@ export const AuthProvider = ({
   const router = useRouter();
   const pathname = usePathname();
   const [state, setState] = useState(() => {
-    const storedState = localStorage.getItem('authState');
+    const storedState = window.localStorage.getItem('authState');
     return storedState
       ? JSON.parse(storedState)
       : { isAuthenticated: false, role: '', session: null };
@@ -36,7 +36,7 @@ export const AuthProvider = ({
   console.log({ 'shohaner heda': state });
 
   useEffect(() => {
-    localStorage.setItem('authState', JSON.stringify(state));
+    window.localStorage.setItem('authState', JSON.stringify(state));
   }, [state]);
 
   const login = (role, session) => {
