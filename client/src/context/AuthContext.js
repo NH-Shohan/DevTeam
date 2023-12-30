@@ -4,12 +4,16 @@ import { createContext } from 'react';
 
 export const AuthContext = createContext({});
 
-const AuthProvider = ({ children }) => {
-  const state = false;
-  const role = 'recruiter';
+const AuthProvider = ({ children, admin, programmer, company, recruiter }) => {
+  const state = true;
+  const role = 'programmer';
   return (
     <AuthContext.Provider value={{ state, role }}>
-      {children}
+      {role === '' && children}
+      {role === 'admin' && admin}
+      {role === 'programmer' && programmer}
+      {role === 'company' && company}
+      {role === 'recruiter' && recruiter}
     </AuthContext.Provider>
   );
 };

@@ -1,3 +1,4 @@
+'use client';
 import { AuthContext } from '@/context/AuthContext';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -23,7 +24,7 @@ function DashboardNavbar() {
 
       {context.role === 'admin' ? (
         <>
-          <Routes path="/AdminHome" name={'Home'} />
+          <Routes path="/" name={'Home'} />
           <Routes path="/CreateAdmin" name={'Create Admin'} />
           <Routes path="/CreateRecruiter" name={'Create Recruiter'} />
           <Routes path="/DeleteCompany" name={'Delete Company'} />
@@ -31,7 +32,7 @@ function DashboardNavbar() {
         </>
       ) : context.role === 'programmer' ? (
         <>
-          <Routes path="/ProgrammerHome" name={'Home'} />
+          <Routes path="/" name={'Home'} />
           <Routes path="/ApplyJob" name={'Apply Job'} />
           <Routes path="/Interviews" name={'Interviews'} />
           <Routes path="/ProgrammerMessages" name={'Messages'} />
@@ -39,7 +40,7 @@ function DashboardNavbar() {
         </>
       ) : context.role === 'company' ? (
         <>
-          <Routes path="/CompanyHome" name={'Home'} />
+          <Routes path="/" name={'Home'} />
           <Routes
             path="/CompanyPersonalInformation"
             name={'Personal Information'}
@@ -50,7 +51,7 @@ function DashboardNavbar() {
         </>
       ) : context.role === 'recruiter' ? (
         <>
-          <Routes path="/RecruiterHome" name={'Home'} />
+          <Routes path="/" name={'Home'} />
           <Routes
             path="/RecruiterPersonalInformation"
             name={'Personal Information'}
@@ -63,9 +64,9 @@ function DashboardNavbar() {
       ) : null}
 
       <div className="absolute bottom-0 w-full p-5">
-        <Link href={'/SignIn'} className="w-full">
+        <Link href={'/'} className="w-full">
           <button
-            className={`hover:bg-red-light text-red small-bold w-full py-2 rounded-lg small text-left pl-4 transition-all`}
+            className={`hover:bg-red-light text-red bold w-full py-4 rounded-lg text-left pl-4 transition-all`}
           >
             Logout
           </button>

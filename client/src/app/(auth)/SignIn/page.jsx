@@ -38,13 +38,13 @@ export default function SignIn() {
     } else if (
       email === 'dev@gmail.com' &&
       password === '123456' &&
-      context.role === 'admin'
+      context.role === 'company'
     ) {
       router.replace('/CompanyHome');
     } else if (
       email === 'dev@gmail.com' &&
       password === '123456' &&
-      context.role === 'admin'
+      context.role === 'recruiter'
     ) {
       router.replace('/RecruiterHome');
     } else {

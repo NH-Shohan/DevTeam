@@ -17,7 +17,7 @@ module.exports = {
       light: '#E7E7E7',
       white: '#FBFBFB',
       red: '#FF4444',
-      'red-light': '#FF444436',
+      'red-light': '#FF444455',
     },
   },
   plugins: [require('tailwind-scrollbar')({ nocompatible: true })],
