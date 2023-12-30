@@ -7,9 +7,11 @@ import {
   JoinColumn,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { CompanyEntity } from '../company/company.entity';
 import { RecruiterEntity } from 'src/Recruiter/recruiter.entity';
+import { AppliedJobsEntity } from 'src/Recruiter/applied_jobs.entity';
 
 @Entity('available_jobs')
 export class AvailableJobsEntity {
@@ -45,4 +47,7 @@ export class AvailableJobsEntity {
   })
   @JoinTable()
   interviewer: RecruiterEntity;
+
+  @OneToMany(() => AppliedJobsEntity, (appliedJob) => appliedJob.availableJob)
+  appliedJobs: AppliedJobsEntity[];
 }

@@ -9,6 +9,9 @@ import {
   UseInterceptors,
   HttpException,
   HttpStatus,
+  Get,
+  Param,
+  NotFoundException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CompanyService } from './company.service';
@@ -99,5 +102,22 @@ export class CompanyController {
     @Body() interviewListData: Partial<InterviewListEntity>,
   ): Promise<InterviewListEntity> {
     return this.interviewListService.createInterviewList(interviewListData);
+  }
+
+  @Get('interview-list')
+  async getAllInterviewLists(): Promise<InterviewListEntity[]> {
+    return this.interviewListService.findAllInterviewLists();
+  }
+
+  @Get('interview-list/:email')
+  async getInterviewList(
+    @Param('email') email: string,
+  ): Promise<InterviewListEntity[]> {
+    const interviewLists =
+      await this.interviewListService.findInterviewListByEmail(email);
+    if (!interviewLists || interviewLists.length === 0) {
+      throw new NotFoundException('Interview lists not found');
+    }
+    return interviewLists;
   }
 }

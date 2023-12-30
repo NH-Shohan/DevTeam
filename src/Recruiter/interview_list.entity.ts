@@ -1,5 +1,11 @@
 // interview_list.entity.ts
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
 import { AppliedJobsEntity } from './applied_jobs.entity';
 import { ProfileEntity } from 'src/programmer/profile/profile.entity';
 import { RecruiterEntity } from './recruiter.entity';
@@ -9,16 +15,21 @@ export class InterviewListEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => AppliedJobsEntity, (appliedJob) => appliedJob.id)
+  @ManyToOne(() => AppliedJobsEntity, (appliedJob) => appliedJob.companyEmail, {
+    eager: true,
+  })
   appliedJob: AppliedJobsEntity;
 
-  @ManyToOne(() => ProfileEntity, (programmer) => programmer.email)
-  programmer: ProfileEntity;
+  //   @ManyToOne(() => ProfileEntity, (programmerData) => programmerData.email)
+  //   @JoinColumn({ name: 'programmerData' })
+  //   programmerData: ProfileEntity;
 
-  @ManyToOne(() => RecruiterEntity, (recruiter) => recruiter.email)
+  @ManyToOne(() => RecruiterEntity, (recruiter) => recruiter.email, {
+    eager: true,
+  })
   recruiter: RecruiterEntity;
 
-  @ManyToOne(() => CompanyEntity, (company) => company.email)
+  @ManyToOne(() => CompanyEntity, (company) => company.email, { eager: true })
   company: CompanyEntity;
 
   @Column({ nullable: true })

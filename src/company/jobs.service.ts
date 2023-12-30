@@ -15,7 +15,7 @@ export class AvailableJobsService {
     @InjectRepository(CompanyEntity)
     private readonly companyRepository: Repository<CompanyEntity>,
     @InjectRepository(RecruiterEntity)
-    private recruiterEntityRepository: Repository<RecruiterEntity>,
+    private readonly recruiterEntityRepository: Repository<RecruiterEntity>,
   ) {}
 
   async createAvailableJobsEntity(
@@ -33,7 +33,7 @@ export class AvailableJobsService {
     const interviewerEmail = await this.recruiterEntityRepository.findOne({
       where: { email: interviewer },
     });
-
+    console.log(interviewerEmail);
     const availableJobsEntity = this.availableJobsRepository.create({
       ...rest,
       company,

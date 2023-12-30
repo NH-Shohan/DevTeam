@@ -1,11 +1,18 @@
 // applied_jobs.entity.ts
 import { AvailableJobsEntity } from 'src/company/jobs.entity';
 import { ProfileEntity } from 'src/programmer/profile/profile.entity';
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Generated,
+  PrimaryColumn,
+} from 'typeorm';
 
 @Entity('applied_jobs')
 export class AppliedJobsEntity {
-  @PrimaryGeneratedColumn()
+  @Generated()
   id: number;
 
   @ManyToOne(() => AvailableJobsEntity, (availableJob) => availableJob.id)
@@ -13,6 +20,9 @@ export class AppliedJobsEntity {
 
   @ManyToOne(() => ProfileEntity, (programmer) => programmer.email)
   programmer: ProfileEntity;
+
+  @PrimaryColumn()
+  companyEmail: string;
 
   // Add other columns or relationships as needed
 }

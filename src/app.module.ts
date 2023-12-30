@@ -48,7 +48,7 @@ import { InterviewListService } from './Recruiter/Jobs/interview-list.service';
       autoLoadEntities: true,
       entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
-      logging: false,
+      logging: true,
       // dropSchema:true
     }),
     TypeOrmModule.forFeature([
