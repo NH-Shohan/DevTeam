@@ -78,7 +78,7 @@ export class ProfileController {
 
   // Get Programmer Profile
   @Get('profile')
-  @UseGuards(SessionGuard)
+  // @UseGuards(SessionGuard)
   getProfile() {
     try {
       return this.profileService.getAllProfileInfo();

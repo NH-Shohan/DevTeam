@@ -75,4 +75,24 @@ export class AuthService {
     console.log(session);
     return passwordMatch;
   }
+
+  async getAdminProfileByEmail(email: string): Promise<AdminEntity | null> {
+    return this.adminRepository.findOne({ where: { email } });
+  }
+
+  async getRecruiterProfileByEmail(
+    email: string,
+  ): Promise<RecruiterEntity | null> {
+    return this.recruiterRepository.findOne({ where: { email } });
+  }
+
+  async getProgrammerProfileByEmail(
+    email: string,
+  ): Promise<ProfileEntity | null> {
+    return this.programmerRepository.findOne({ where: { email } });
+  }
+
+  async getCompanyProfileByEmail(email: string): Promise<CompanyEntity | null> {
+    return this.companyRepository.findOne({ where: { email } });
+  }
 }
