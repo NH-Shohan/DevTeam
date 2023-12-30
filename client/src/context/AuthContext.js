@@ -41,9 +41,9 @@ export const AuthProvider = ({
     // router.push('/');
   };
 
-  // const sessionCookie = Cookies.get('connect.sid')
-  //   ? Cookies.get('connect.sid')
-  //   : null;
+  const sessionCookie = Cookies.get('connect.sid')
+    ? Cookies.get('connect.sid')
+    : null;
 
   useEffect(() => {
     if (!state?.session || !state?.isAuthenticated) {
