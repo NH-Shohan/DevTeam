@@ -47,11 +47,11 @@ export const AuthProvider = ({
 
   useEffect(() => {
     if (!state?.session || !state?.isAuthenticated) {
-      router.push('/'); // Redirect to login page after logout
+      // Redirect to login page after logout
       //  // Redirect to login page after logout
-      // if (pathname !== '/') {
-      //   redirect('/');
-      // }
+      if (pathname !== '/' && pathname !== '/SignUp') {
+        router.push('/');
+      }
     }
   }, [state, router, pathname]);
 
