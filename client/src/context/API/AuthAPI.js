@@ -22,8 +22,6 @@ const useAuthAPI = () => {
         password,
       });
 
-      console.log('getting backend daata', response.data);
-
       login(response.data.role, response.data.session);
 
       return response.data.session;

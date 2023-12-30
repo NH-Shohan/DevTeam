@@ -68,7 +68,7 @@ export const AuthProvider = ({
               },
             },
           );
-          setLoggedInUser(response?.data);
+          setLoggedInUser({ ...response?.data, state });
         }
       } catch (error) {
         console.error('Error fetching current user:', error.message);
@@ -76,9 +76,9 @@ export const AuthProvider = ({
     };
 
     currentUser();
-  }, [state?.isAuthenticated, state.session]);
+  }, [state?.isAuthenticated, state, sessionCookie]);
 
-  console.log({ safaasdf: loggedInUser });
+  console.log({ 'getting backend daata': loggedInUser });
   return (
     <AuthContext.Provider value={{ ...state, login, logout, loggedInUser }}>
       {!state.isAuthenticated && children}
