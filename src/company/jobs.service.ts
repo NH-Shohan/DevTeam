@@ -42,6 +42,12 @@ export class AvailableJobsService {
 
     return this.availableJobsRepository.save(availableJobsEntity);
   }
+
+  async findAllAvailableJobs(): Promise<AvailableJobsEntity[]> {
+    return this.availableJobsRepository.find({
+      relations: ['company', 'interviewer', 'appliedJobs'],
+    });
+  }
 }
 
 // @Injectable()

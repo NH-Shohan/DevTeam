@@ -91,6 +91,12 @@ export class CompanyController {
   }
 
   // Jobs
+  @Get('available-jobs')
+  async findAllAvailableJobs() {
+    return this.availableJobsService.findAllAvailableJobs();
+  }
+
+  // Jobs
   @Post('applied-job')
   async createAppliedJob(
     @Body() appliedJobData: Partial<AppliedJobsEntity>,

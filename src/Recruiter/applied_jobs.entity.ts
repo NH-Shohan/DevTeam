@@ -8,9 +8,11 @@ import {
   PrimaryGeneratedColumn,
   Generated,
   PrimaryColumn,
+  Unique,
 } from 'typeorm';
 
 @Entity('applied_jobs')
+@Unique(['availableJob', 'programmer'])
 export class AppliedJobsEntity {
   @Generated()
   id: number;

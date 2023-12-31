@@ -14,8 +14,24 @@ export class AppliedJobsService {
   async createAppliedJob(
     appliedJobData: Partial<AppliedJobsEntity>,
   ): Promise<AppliedJobsEntity> {
-    const appliedJob = this.appliedJobsRepository.create(appliedJobData);
-    return this.appliedJobsRepository.save(appliedJob);
+    const { availableJob, programmer } = appliedJobData;
+
+    const existingAppliedJob = await this.appliedJobsRepository.findOne({
+      where: {
+        availableJob: { id: availableJob?.id }, // Assuming availableJob has an 'id' property
+        programmer: { email: programmer?.email }, // Assuming programmer has an 'email' property
+      },
+    });
+
+    if (existingAppliedJob) {
+      // Update existing applied job data
+      Object.assign(existingAppliedJob, appliedJobData);
+      return this.appliedJobsRepository.save(existingAppliedJob);
+    } else {
+      // Create a new applied job
+      const newAppliedJob = this.appliedJobsRepository.create(appliedJobData);
+      return this.appliedJobsRepository.save(newAppliedJob);
+    }
   }
 
   async findAllAppliedJobs(): Promise<any[]> {

@@ -1,21 +1,32 @@
 'use client';
+// Interviews.jsx
 import Table from '@/components/Table/Table';
+import { AuthContext } from '@/context/AuthContext';
 import axios from 'axios';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 const Interviews = () => {
+  const context = useContext(AuthContext);
+
+  const { loggedInUser } = context;
   const [jobs, setJobs] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResult, setSearchResult] = useState(null);
+  const [signedEmail, setSignedEmail] = useState();
 
   useEffect(() => {
     fetchJobs();
   }, []);
+  useEffect(() => {
+    setSignedEmail(loggedInUser.email);
+  }, [loggedInUser.email]);
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get('http://localhost:3333/available-jobs');
+      const response = await axios.get(
+        'http://localhost:3333/company/available-jobs',
+      );
       setJobs(response.data);
     } catch (error) {
       console.error('Fetch Jobs Error:', error.response || error);
@@ -25,12 +36,30 @@ const Interviews = () => {
   const handleSearch = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3333/available-jobs/${searchTerm}`,
+        `http://localhost:3333/company/available-jobs/${searchTerm}`,
       );
       setSearchResult(response.data);
     } catch (error) {
       console.error('Search Error:', error.response || error);
       setSearchResult(null);
+    }
+  };
+
+  const handleApply = async (jobId, companyEmail) => {
+    // Replace this with the actual logged-in user data
+    console.log({ jobId, companyEmail, signedEmail });
+    try {
+      await axios.post('http://localhost:3333/company/applied-job', {
+        programmer: signedEmail,
+        availableJob: jobId,
+        companyEmail: companyEmail,
+      });
+
+      // You can perform additional actions after successful application if needed
+      console.log('Application successful');
+    } catch (error) {
+      console.error('Apply Error:', error.response || error);
+      // Handle the error or provide user feedback
     }
   };
 
@@ -58,14 +87,26 @@ const Interviews = () => {
           jobExpireDate: searchResult.jobExpireDate,
           joiningDate: searchResult.joiningDate,
           requiredSkills: searchResult.requiredSkills.join(', '),
-          interviewer: searchResult.interviewer.name,
+          interviewer: searchResult.interviewer
+            ? searchResult.interviewer.name
+            : 'N/A',
           Actions: (
-            <button
-              onClick={() => handleDelete(searchResult.id)}
-              className="bg-red text-white px-2 py-1 rounded"
-            >
-              Delete
-            </button>
+            <>
+              <button
+                onClick={() =>
+                  handleApply(searchResult.id, searchResult.company.email)
+                }
+                className="bg-green text-white px-2 py-1 rounded"
+              >
+                Apply
+              </button>
+              <button
+                onClick={() => handleDelete(searchResult.id)}
+                className="bg-red text-white px-2 py-1 rounded"
+              >
+                Delete
+              </button>
+            </>
           ),
         },
       ]
@@ -78,17 +119,14 @@ const Interviews = () => {
         jobExpireDate: job.jobExpireDate,
         joiningDate: job.joiningDate,
         requiredSkills: job.requiredSkills.join(', '),
-        interviewer: job.interviewer.name,
+        interviewer: job.interviewer ? job.interviewer.name : 'N/A',
         Actions: (
           <>
             <button
-              onClick={() => handleDelete(job.id)}
+              onClick={() => handleApply(job.id, job.company.email)}
               className="bg-red text-white px-2 py-1 rounded"
             >
-              Delete
-            </button>
-            <button className="bg-red text-white px-2 py-1 rounded">
-              <Link to={`/update-job/${job.id}`}>Update</Link>
+              Apply
             </button>
           </>
         ),
