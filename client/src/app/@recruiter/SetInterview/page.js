@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import { AuthContext } from '@/context/AuthContext';
+import axios from 'axios';
+import { useContext, useEffect, useState } from 'react';
 
 const SetInterview = () => {
   const context = useContext(AuthContext);
@@ -87,6 +87,7 @@ const SetInterview = () => {
         <label>
           Applied Job:
           <select
+            className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light bg-primary focus:border-blue"
             name="appliedJob"
             value={interviewData.appliedJob}
             onChange={handleInputChange}
@@ -107,6 +108,7 @@ const SetInterview = () => {
         <label>
           Programmer Data:
           <select
+            className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light bg-primary focus:border-blue"
             name="programmerData"
             value={interviewData.programmerData}
             onChange={handleInputChange}
@@ -127,6 +129,7 @@ const SetInterview = () => {
         <label>
           Google Meet Link:
           <input
+            className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light bg-primary focus:border-blue"
             type="text"
             name="googleMeetLink"
             value={interviewData.googleMeetLink}
@@ -139,6 +142,7 @@ const SetInterview = () => {
         <label>
           Date and Time:
           <input
+            className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light bg-primary focus:border-blue"
             type="datetime-local"
             name="dateTime"
             value={interviewData.dateTime}
@@ -148,7 +152,12 @@ const SetInterview = () => {
         </label>
         <br />
 
-        <button type="submit">Set Interview</button>
+        <button
+          className="border border-blue py-3 px-8 rounded-lg bg-blue hover:bg-[#3333bd99] transition-all text-white flex justify-center items-center w-1/4"
+          type="submit"
+        >
+          Set Interview
+        </button>
       </form>
     </div>
   );
