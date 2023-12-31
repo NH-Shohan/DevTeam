@@ -26,6 +26,7 @@ import { SessionGuard } from './session.guard';
 import { GrowthEntityService } from './gowth.service';
 import { GrowthEntity } from './growth.entity';
 import { AdminEntityService } from './admin.service';
+import { AdminEntity } from './admin.entity';
 
 // const recruiters = [];
 const companies = [];
@@ -81,6 +82,15 @@ export class AdminController {
     const result = { ...profile, imageName: fileName };
 
     return this.appService.createAdminEntity(result);
+  }
+
+  // update admin
+  @Put('/update-admin/:email')
+  async updateAdmin(
+    @Param('email') email: string,
+    @Body() updatedAdminData: Partial<AdminEntity>,
+  ): Promise<AdminEntity> {
+    return this.appService.updateAdminByEmail(email, updatedAdminData);
   }
 
   // Read own admin

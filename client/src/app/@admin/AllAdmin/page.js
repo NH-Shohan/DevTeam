@@ -3,6 +3,7 @@ import Table from '@/components/Table/Table';
 import axios from 'axios';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 const AllAdmin = () => {
   const [admins, setAdmins] = useState([]);
@@ -115,12 +116,17 @@ const AllAdmin = () => {
             'No photo detected'
           ),
         Actions: (
-          <button
-            onClick={() => handleDelete(admin.email)}
-            className="bg-red text-white px-2 py-1 rounded"
-          >
-            Delete
-          </button>
+          <>
+            <button
+              onClick={() => handleDelete(admin.email)}
+              className="bg-red text-white px-2 py-1 rounded"
+            >
+              Delete
+            </button>
+            <button className="bg-red text-white px-2 py-1 rounded">
+              <Link href={`/AllAdmin/${admin.email}`}>Update</Link>
+            </button>
+          </>
         ),
       }));
 

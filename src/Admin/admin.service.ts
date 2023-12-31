@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm'; // change this to your entity class
 import { RecruiterEntity } from 'src/Recruiter/recruiter.entity';
@@ -62,6 +62,32 @@ export class AdminEntityService {
       throw new Error('Email address is already in use');
     }
   }
+
+  async updateAdminByEmail(
+    email: string,
+    updatedAdminData: Partial<AdminEntity>,
+  ): Promise<AdminEntity> {
+    try {
+      // Find the admin by email
+      const admin = await this.AdminEntityRepository.findOneBy({ email });
+
+      if (!admin) {
+        throw new NotFoundException('Admin not found');
+      }
+
+      // Update the admin's data
+      Object.assign(admin, updatedAdminData);
+
+      // Save the updated admin entity
+      const updatedAdmin = await this.AdminEntityRepository.save(admin);
+
+      return updatedAdmin;
+    } catch (error) {
+      // Handle errors or rethrow
+      throw new Error('Failed to update admin');
+    }
+  }
+
   async getAllAdminEntitys(): Promise<AdminEntity[]> {
     return this.AdminEntityRepository.find();
   }

@@ -9,7 +9,7 @@ import { FaEyeSlash } from 'react-icons/fa6';
 
 import { toast, ToastContainer } from 'react-toastify';
 
-const CreateAdmin = () => {
+const CreateAdmin = ({ currentEmail }) => {
   const {
     control,
     handleSubmit,
@@ -151,13 +151,24 @@ const CreateAdmin = () => {
     });
 
     try {
-      const response = await axios.post(
-        'http://localhost:3333/admin/create-admin',
-        formData,
-      );
-      console.log('API Response:', response);
+      if (currentEmail) {
+        // Update operation
+        const response = await axios.put(
+          `http://localhost:3333/admin/update-admin/${currentEmail}`,
+          formData,
+        );
+        console.log('API Response:', response);
 
-      notify('success');
+        notify('success');
+      } else {
+        const response = await axios.post(
+          'http://localhost:3333/admin/create-admin',
+          formData,
+        );
+        console.log('API Response:', response);
+
+        notify('success');
+      }
     } catch (error) {
       console.error('API Error:', error.response || error);
       notify(error);
@@ -469,7 +480,7 @@ const CreateAdmin = () => {
             type="submit"
             className="border border-blue py-3 px-8 rounded-lg bg-blue hover:bg-[#3333bd99] transition-all text-white flex justify-center items-center w-fit"
           >
-            Create Admin
+            {!currentEmail ? 'Create Admin' : 'Update Admin'}
           </button>
         </div>
       </form>
