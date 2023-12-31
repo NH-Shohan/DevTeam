@@ -121,13 +121,26 @@ const CreateRecruiter = () => {
     formData.append('linkedInLink', linkedInLink);
 
     try {
-      const response = await axios.post(
-        'http://localhost:3333/recruiter/create-recruiter',
-        formData,
-      );
-      console.log('API Response:', response);
+      if (currentEmail) {
+        // Update operation
+        const response = await axios.put(
+          `http://localhost:3333/recruiter/update-recruiter/${currentEmail}`,
+          formData,
+        );
+        console.log('API Response:', response);
 
-      notify('success');
+        notify('success');
+      }
+
+      else {
+        const response = await axios.post(
+          'http://localhost:3333/recruiter/create-recruiter',
+          formData,
+        );
+        console.log('API Response:', response);
+  
+        notify('success');
+      }
     } catch (error) {
       console.error('API Error:', error.response || error);
       notify(error);
