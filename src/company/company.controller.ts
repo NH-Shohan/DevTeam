@@ -12,6 +12,7 @@ import {
   Get,
   Param,
   NotFoundException,
+  Delete,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CompanyService } from './company.service';
@@ -119,5 +120,20 @@ export class CompanyController {
       throw new NotFoundException('Interview lists not found');
     }
     return interviewLists;
+  }
+
+  @Get('get-companies')
+  async getCompanies() {
+    return this.companyService.getCompanies();
+  }
+
+  @Get('get-company/:email')
+  async getRecruiterEntityById(@Param('email') email: string) {
+    return this.companyService.getRecruiterEntityById(email);
+  }
+
+  @Delete('delete-company/:email')
+  async deleteCompany(@Param('email') email: string) {
+    return this.companyService.deleteCompany(email);
   }
 }

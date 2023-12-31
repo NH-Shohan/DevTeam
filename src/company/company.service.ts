@@ -1,10 +1,11 @@
 // company.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CompanyEntity } from './company.entity';
 import { CreateCompanyDTO } from './company.dto';
 import { UsersEntity } from 'src/Relation/user.entity';
+import { RecruiterEntity } from 'src/Recruiter/recruiter.entity';
 
 @Injectable()
 export class CompanyService {
@@ -40,5 +41,28 @@ export class CompanyService {
     await this.companyRepository.save(companyEntity);
 
     return companyEntity;
+  }
+
+  async getCompanies() {
+    return this.companyRepository.find();
+  }
+
+  async getRecruiterEntityById(email: string): Promise<CompanyEntity> {
+    const company = await this.companyRepository.findOneBy({ email });
+
+    if (!company) {
+      throw new NotFoundException('company not found');
+    }
+
+    return company;
+  }
+  async deleteCompany(email: string) {
+    const result = await this.companyRepository.delete({ email });
+
+    if (result.affected === 0) {
+      throw new NotFoundException('Company not found');
+    }
+
+    return { message: 'Company deleted successfully' };
   }
 }
