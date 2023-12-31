@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm'; // change this to your entity class
 import { ValidateRecruiterProfile } from './recruiter.dto';
@@ -48,6 +48,34 @@ export class RecruiterEntityService {
     await this.RecruiterEntityRepository.save(recruiter);
 
     return recruiter;
+  }
+
+  async updateRecruiterByEmail(
+    email: string,
+    updatedRecruiterData: Partial<RecruiterEntity>,
+  ): Promise<RecruiterEntity> {
+    try {
+      // Find the recruiter by email
+      const recruiter = await this.RecruiterEntityRepository.findOneBy({
+        email,
+      });
+
+      if (!recruiter) {
+        throw new NotFoundException('Recruiter not found');
+      }
+
+      // Update the recruiter's data
+      Object.assign(recruiter, updatedRecruiterData);
+
+      // Save the updated recruiter entity
+      const updatedRecruiter =
+        await this.RecruiterEntityRepository.save(recruiter);
+
+      return updatedRecruiter;
+    } catch (error) {
+      // Handle errors or rethrow
+      throw new Error('Failed to update recruiter');
+    }
   }
 
   async getAllRecruiterEntitys(): Promise<RecruiterEntity[]> {

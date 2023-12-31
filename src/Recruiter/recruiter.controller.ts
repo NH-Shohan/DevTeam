@@ -24,6 +24,7 @@ import { MulterError, diskStorage } from 'multer';
 import { ValidateRecruiterProfile } from './recruiter.dto';
 import { RecruiterEntityService } from './recruiter.service';
 import { SessionGuard } from './session.guard';
+import { RecruiterEntity } from './recruiter.entity';
 
 // recruiter
 const interviews = [];
@@ -98,6 +99,14 @@ export class RecruiterController {
   @Get('get-recruiter/:email')
   getMyProfile(@Param('email') email: string): any {
     return this.appService.getRecruiterEntityById(email);
+  }
+
+  @Put('/update-recruiter/:email')
+  async updateRecruiter(
+    @Param('email') email: string,
+    @Body() updatedRecruiterData: Partial<RecruiterEntity>,
+  ): Promise<RecruiterEntity> {
+    return this.appService.updateRecruiterByEmail(email, updatedRecruiterData);
   }
 
   @Post('signin')
