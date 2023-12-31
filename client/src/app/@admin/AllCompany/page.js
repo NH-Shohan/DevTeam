@@ -27,7 +27,7 @@ const AllCompany = () => {
   const handleSearch = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:3333/company/me/${searchTerm}`,
+        `http://localhost:3333/company/get-company/${searchTerm}`,
       );
       setSearchResult(response.data);
     } catch (error) {
