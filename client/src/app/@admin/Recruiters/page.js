@@ -1,46 +1,53 @@
+'use client';
 import Table from '@/components/Table/Table';
 import axios from 'axios';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
- 
+
 const AllRecruiters = () => {
   const [recruiters, setRecruiters] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResult, setSearchResult] = useState(null);
- 
+
   useEffect(() => {
     fetchRecruiters();
   }, []);
- 
+
   const fetchRecruiters = async () => {
     try {
-      const response = await axios.get('http://localhost:3333/recruiter/get-recruiters');
+      const response = await axios.get(
+        'http://localhost:3333/recruiter/get-recruiters',
+      );
       setRecruiters(response.data);
     } catch (error) {
       console.error('Fetch Recruiters Error:', error.response || error);
     }
   };
- 
+
   const handleSearch = async () => {
     try {
-      const response = await axios.get(`http://localhost:3333/recruiter/get-recruiter/${searchTerm}`);
+      const response = await axios.get(
+        `http://localhost:3333/recruiter/get-recruiter/${searchTerm}`,
+      );
       setSearchResult(response.data);
     } catch (error) {
       console.error('Search Error:', error.response || error);
       setSearchResult(null);
     }
   };
- 
+
   const handleDelete = async (email) => {
     try {
-      await axios.delete(`http://localhost:3333/recruiter/delete-recruiter/${email}`);
+      await axios.delete(
+        `http://localhost:3333/recruiter/delete-recruiter/${email}`,
+      );
       fetchRecruiters();
     } catch (error) {
       console.error('Delete Error:', error.response || error);
     }
   };
- 
+
   const columns = [
     { title: '#', key: 'Count' },
     { title: 'Name', key: 'Name' },
@@ -52,7 +59,7 @@ const AllRecruiters = () => {
     { title: 'Image', key: 'Image' },
     { title: 'Actions', key: 'Actions' },
   ];
- 
+
   const data = searchResult
     ? [
         {
@@ -64,26 +71,27 @@ const AllRecruiters = () => {
           Projects: searchResult.projectLinks.join(', '),
           LinkedIn: searchResult.linkedInLink,
           Image:
-            searchResult.photo && searchResult.photo.startsWith('data:image/') ? (
-<div className="relative rounded-full overflow-hidden h-10 w-10">
-<Image
+            searchResult.photo &&
+            searchResult.photo.startsWith('data:image/') ? (
+              <div className="relative rounded-full overflow-hidden h-10 w-10">
+                <Image
                   src={searchResult.photo}
                   alt={`Avatar for ${searchResult.name}`}
                   layout="fill"
                   objectFit="cover"
                   className="rounded-full"
                 />
-</div>
+              </div>
             ) : (
               'No photo detected'
             ),
           Actions: (
-<button
+            <button
               onClick={() => handleDelete(searchResult.email)}
               className="bg-red text-white px-2 py-1 rounded"
->
+            >
               Delete
-</button>
+            </button>
           ),
         },
       ]
@@ -97,59 +105,59 @@ const AllRecruiters = () => {
         LinkedIn: recruiter.linkedInLink,
         Image:
           recruiter.photo && recruiter.photo.startsWith('data:image/') ? (
-<div className="relative rounded-full overflow-hidden h-10 w-10">
-<Image
+            <div className="relative rounded-full overflow-hidden h-10 w-10">
+              <Image
                 src={recruiter.photo}
                 alt={`Avatar for ${recruiter.name}`}
                 layout="fill"
                 objectFit="cover"
                 className="rounded-full"
               />
-</div>
+            </div>
           ) : (
             'No photo detected'
           ),
         Actions: (
-<>
-<button
+          <>
+            <button
               onClick={() => handleDelete(recruiter.email)}
               className="bg-red text-white px-2 py-1 rounded"
->
+            >
               Delete
-</button>
-<button className="bg-red text-white px-2 py-1 rounded">
-<Link href={`/AllRecruiters/${recruiter.email}`}>Update</Link>
-</button>
-</>
+            </button>
+            <button className="bg-red text-white px-2 py-1 rounded">
+              <Link href={`/AllRecruiters/${recruiter.email}`}>Update</Link>
+            </button>
+          </>
         ),
       }));
- 
+
   return (
-<div>
-<div className="mb-4">
-<label className="block text-gray-700 text-sm font-bold mb-2">
+    <div>
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2">
           Search by Email
-</label>
-<div className="flex">
-<input
+        </label>
+        <div className="flex">
+          <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Enter email to search"
             className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light bg-primary focus:border-blue"
           />
-<button
+          <button
             onClick={handleSearch}
             className="ml-2 border transition-all bg-blue px-4 rounded-lg h-[48px] hover:bg-secondary hover:border-blue"
->
+          >
             Search
-</button>
-</div>
-</div>
- 
+          </button>
+        </div>
+      </div>
+
       <Table columns={columns} data={data} />
-</div>
+    </div>
   );
 };
- 
+
 export default AllRecruiters;

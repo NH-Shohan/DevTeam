@@ -69,8 +69,8 @@ export class RecruiterEntityService {
     await this.RecruiterEntityRepository.update(id, updatedRecruiterEntity);
     return this.RecruiterEntityRepository.findOneBy({ id: id });
   }
-  async deleteRecruiterEntity(id: number): Promise<void> {
-    await this.RecruiterEntityRepository.delete(id);
+  async deleteRecruiterEntity(email: string): Promise<void> {
+    await this.RecruiterEntityRepository.delete({ email });
   }
 
   // Recruit Team

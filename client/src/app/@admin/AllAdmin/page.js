@@ -85,7 +85,7 @@ const AllAdmin = () => {
             ),
           Actions: (
             <button
-              onClick={() => handleDelete(searchResult.id)}
+              onClick={() => handleDelete(searchResult.email)}
               className="bg-red text-white px-2 py-1 rounded"
             >
               Delete

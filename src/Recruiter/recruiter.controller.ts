@@ -77,12 +77,14 @@ export class RecruiterController {
     }
   }
 
-  @Delete('delete-admin/:id')
-  deleteRecruiter(@Param('id') id): any {
+  @Delete('delete-recruiter/:email')
+  deleteRecruiter(@Param('email') email: string): any {
     try {
-      this.appService.deleteRecruiterEntity(id);
+      this.appService.deleteRecruiterEntity(email);
     } catch (error) {
       console.log(error);
+      // You might want to handle the error more appropriately, e.g., return an error response.
+      return { error: 'Failed to delete recruiter' };
     }
     return { msg: 'Deleted Successfully' };
   }
@@ -197,13 +199,6 @@ export class RecruiterController {
 
   // Candidate
   // --------------------------------------------
-
-  //remove candidate
-  @Delete('delete-candidate/:id')
-  deleteProfile(@Param('id', ParseIntPipe) id: number) {
-    this.appService.deleteRecruiterEntity(id);
-    return 'success';
-  }
 
   //Approve Candidate
   @Post('create-candidate')
