@@ -29,6 +29,7 @@ function DashboardNavbar() {
           <Routes path="/AllAdmin" name={'All Admin'} />
           <Routes path="/AllCompany" name={'All Company'} />
           <Routes path="/AllDeveloper" name={'All Developer'} />
+          <Routes path="/Recruiters" name={'All Recruiter'} />
           <Routes path="/CreateRecruiter" name={'Create Recruiter'} />
         </>
       ) : context.role === 'programmer' ? (

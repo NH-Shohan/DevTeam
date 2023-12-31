@@ -77,16 +77,25 @@ export class RecruiterController {
     }
   }
 
+  @Delete('delete-admin/:id')
+  deleteRecruiter(@Param('id') id): any {
+    try {
+      this.appService.deleteRecruiterEntity(id);
+    } catch (error) {
+      console.log(error);
+    }
+    return { msg: 'Deleted Successfully' };
+  }
+
   //Full Recruiter team
   @Post('recruit-team')
   recruitTeam(@Body() body): any {
     return this.appService.recruitTeam(body);
   }
 
-  @Get('get-recruiter/:id')
-  @UseGuards(SessionGuard)
-  getMyProfile(@Param('id') id): any {
-    return this.appService.getRecruiterEntityById(id);
+  @Get('get-recruiter/:email')
+  getMyProfile(@Param('email') email: string): any {
+    return this.appService.getRecruiterEntityById(email);
   }
 
   @Post('signin')

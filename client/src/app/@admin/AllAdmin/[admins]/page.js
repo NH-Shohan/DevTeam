@@ -5,7 +5,6 @@ import { useParams } from 'next/navigation';
 
 const Update = () => {
   const params = useParams();
-  console.log(JSON.stringify(params));
   return <CreateAdmin currentEmail={params.admins} />;
 };
 

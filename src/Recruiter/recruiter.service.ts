@@ -53,8 +53,8 @@ export class RecruiterEntityService {
   async getAllRecruiterEntitys(): Promise<RecruiterEntity[]> {
     return this.RecruiterEntityRepository.find();
   }
-  async getRecruiterEntityById(id: number): Promise<RecruiterEntity> {
-    return this.RecruiterEntityRepository.findOneBy({ id: id });
+  async getRecruiterEntityById(email: string): Promise<RecruiterEntity> {
+    return this.RecruiterEntityRepository.findOneBy({ email: email });
   }
   async signIn(email, password): Promise<RecruiterEntity> {
     return this.RecruiterEntityRepository.findOneBy({
