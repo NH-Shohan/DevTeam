@@ -1,6 +1,7 @@
 'use client';
 import axios from 'axios';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
@@ -661,6 +662,12 @@ const SignIn = () => {
             </div>
           </form>
         )}
+        <p>
+          Already have an account?{' '}
+          <span className="bold">
+            <Link href={'SignIn'}>Sigin</Link>
+          </span>
+        </p>
       </div>
     </div>
   );
