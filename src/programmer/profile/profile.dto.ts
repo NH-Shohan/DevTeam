@@ -50,7 +50,7 @@ export class ProfileDTO {
   bio: string;
 
   @IsNotEmpty()
-  @IsArray()
+  @IsString()
   contactInformation: string;
 
   @IsNotEmpty()
@@ -66,7 +66,7 @@ export class ProfileDTO {
   education: string;
 
   @IsNotEmpty()
-  @IsArray()
+  @IsString()
   projects: string;
 
   @IsNotEmpty()

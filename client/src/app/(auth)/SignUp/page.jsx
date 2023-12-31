@@ -174,6 +174,13 @@ const SignIn = () => {
       return;
     }
 
+    const contactInformationArray = data.contactInformation
+      .split(',')
+      .map((info) => info.trim());
+    const projectsArray = data.projects
+      .split(',')
+      .map((project) => project.trim());
+
     const formData = new FormData();
     formData.append('name', data.name);
     formData.append('email', data.email);
@@ -185,11 +192,11 @@ const SignIn = () => {
     data.imageName = fileStore;
     formData.append('imageName', data.imageName);
     formData.append('bio', data.bio);
-    formData.append('contactInformation', data.contactInformation);
+    formData.append('contactInformation', contactInformationArray);
     formData.append('location', data.location);
     formData.append('socialMediaLinks', data.socialMediaLinks);
     formData.append('education', data.education);
-    formData.append('projects', data.projects);
+    formData.append('projects', projectsArray);
     formData.append('experiences', data.experiences);
 
     try {
