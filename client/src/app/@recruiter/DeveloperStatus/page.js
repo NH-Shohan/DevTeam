@@ -1,5 +1,7 @@
+import AllDeveloper from '@/app/@admin/AllDeveloper/page';
+
 function DeveloperStatus() {
-  return <div>DeveloperStatus</div>;
+  return <AllDeveloper />;
 }
 
 export default DeveloperStatus;

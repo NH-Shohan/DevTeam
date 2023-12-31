@@ -3,20 +3,52 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InterviewListEntity } from '../interview_list.entity';
+import { AppliedJobsEntity } from '../applied_jobs.entity';
+import { CompanyEntity } from 'src/company/company.entity';
+import { RecruiterEntity } from '../recruiter.entity';
 
 @Injectable()
 export class InterviewListService {
   constructor(
     @InjectRepository(InterviewListEntity)
-    private readonly interviewListRepository: Repository<InterviewListEntity>,
+    private interviewListRepository: Repository<InterviewListEntity>,
+    @InjectRepository(AppliedJobsEntity)
+    private appliedJobsRepository: Repository<AppliedJobsEntity>,
+    @InjectRepository(CompanyEntity)
+    private companyRepository: Repository<CompanyEntity>,
+    @InjectRepository(RecruiterEntity)
+    private recruiterRepository: Repository<RecruiterEntity>,
   ) {}
 
   async createInterviewList(
     interviewListData: Partial<InterviewListEntity>,
   ): Promise<InterviewListEntity> {
-    const interviewList =
-      this.interviewListRepository.create(interviewListData);
-    return this.interviewListRepository.save(interviewList);
+    try {
+      // const appliedJob = await this.appliedJobsRepository.findOneBy([
+      //   { companyEmail: JSON.stringify(interviewListData.appliedJob) },
+      // ]);
+
+      // const recruiter = await this.recruiterRepository.findOneBy([
+      //   { email: JSON.stringify(interviewListData.recruiter) },
+      // ]);
+
+      // const company = await this.companyRepository.findOneBy([
+      //   { email: JSON.stringify(interviewListData.company) },
+      // ]);
+
+      const interviewList = this.interviewListRepository.create({
+        ...interviewListData,
+        // appliedJob,
+        // recruiter,
+        // company,
+      });
+      console.log(interviewList);
+      return await this.interviewListRepository.save(interviewList);
+    } catch (error) {
+      console.log(error);
+      // Handle the error, you might want to throw an exception or return an error response.
+      throw new Error('Failed to create interview list');
+    }
   }
 
   async findAllInterviewLists(): Promise<InterviewListEntity[]> {

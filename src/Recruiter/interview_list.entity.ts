@@ -20,10 +20,6 @@ export class InterviewListEntity {
   })
   appliedJob: AppliedJobsEntity;
 
-  //   @ManyToOne(() => ProfileEntity, (programmerData) => programmerData.email)
-  //   @JoinColumn({ name: 'programmerData' })
-  //   programmerData: ProfileEntity;
-
   @ManyToOne(() => RecruiterEntity, (recruiter) => recruiter.email, {
     eager: true,
   })
@@ -31,6 +27,10 @@ export class InterviewListEntity {
 
   @ManyToOne(() => CompanyEntity, (company) => company.email, { eager: true })
   company: CompanyEntity;
+
+  //   @ManyToOne(() => ProfileEntity, (programmerData) => programmerData.email)
+  //   @JoinColumn({ name: 'programmerData' })
+  //   programmerData: ProfileEntity;
 
   @Column({ nullable: true })
   googleMeetLink: string;
