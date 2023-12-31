@@ -37,7 +37,6 @@ function DashboardNavbar() {
           <Routes path="/" name={'Home'} />
           <Routes path="/ApplyJob" name={'Apply Job'} />
           <Routes path="/Interviews" name={'Interviews'} />
-          <Routes path="/ProgrammerMessages" name={'Messages'} />
           <Routes path="/PersonalInformation" name={'Personal Information'} />
         </>
       ) : context.role === 'company' ? (
@@ -60,7 +59,6 @@ function DashboardNavbar() {
           />
           <Routes path="/SeeInterviews" name={'See Interviews'} />
           <Routes path="/SetInterview" name={'Set Interview'} />
-          <Routes path="/ViewMessages" name={'View Messages'} />
           <Routes path="/DeveloperStatus" name={'Developer Status'} />
         </>
       ) : null}
