@@ -126,7 +126,7 @@ const AllRecruiters = () => {
               Delete
             </button>
             <button className="bg-red text-white px-2 py-1 rounded">
-              <Link href={`/AllRecruiters/${recruiter.email}`}>Update</Link>
+              <Link href={`/Recruiters/${recruiter.email}`}>Update</Link>
             </button>
           </>
         ),

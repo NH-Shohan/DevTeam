@@ -10,7 +10,7 @@ import { FaEyeSlash } from 'react-icons/fa6';
 
 import { toast, ToastContainer } from 'react-toastify';
 
-const CreateRecruiter = () => {
+const CreateRecruiter = ({ currentEmail }) => {
   const {
     control,
     handleSubmit,
@@ -21,7 +21,6 @@ const CreateRecruiter = () => {
   const router = useRouter();
   const [previewImage, setPreviewImage] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
-
   const onSubmit = async (data) => {
     const {
       name,
@@ -42,7 +41,7 @@ const CreateRecruiter = () => {
           position: toast.POSITION.TOP_RIGHT,
           className: 'foo-bar',
         });
-      } else if (event.response.statusText === 'Internal Server Error') {
+      } else if (event?.response?.statusText === 'Internal Server Error') {
         toast.error('Duplicate Email Detected!', {
           position: toast.POSITION.TOP_RIGHT,
           className: 'foo-bar',
@@ -130,15 +129,13 @@ const CreateRecruiter = () => {
         console.log('API Response:', response);
 
         notify('success');
-      }
-
-      else {
+      } else {
         const response = await axios.post(
           'http://localhost:3333/recruiter/create-recruiter',
           formData,
         );
         console.log('API Response:', response);
-  
+
         notify('success');
       }
     } catch (error) {
@@ -459,7 +456,7 @@ const CreateRecruiter = () => {
             type="submit"
             className="border border-blue py-3 px-8 rounded-lg bg-blue hover:bg-[#3333bd99] transition-all text-white flex justify-center items-center w-fit"
           >
-            Create Recruiter
+            {!currentEmail ? 'Create Recruiter' : 'Update Recruiter'}
           </button>
         </div>
       </form>
