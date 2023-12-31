@@ -136,4 +136,9 @@ export class CompanyController {
   async deleteCompany(@Param('email') email: string) {
     return this.companyService.deleteCompany(email);
   }
+
+  @Get('applied-job')
+  async findAllAppliedJobs(): Promise<any[]> {
+    return this.appliedJobsService.findAllAppliedJobs();
+  }
 }

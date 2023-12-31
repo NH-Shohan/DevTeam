@@ -18,5 +18,15 @@ export class AppliedJobsService {
     return this.appliedJobsRepository.save(appliedJob);
   }
 
+  async findAllAppliedJobs(): Promise<any[]> {
+    return this.appliedJobsRepository.find({
+      relations: [
+        'availableJob',
+        'programmer',
+        // Add other relations as needed
+      ],
+    });
+  }
+
   // Implement other methods as needed
 }
