@@ -11,7 +11,7 @@ function DashboardTopbar() {
     <div className="col-span-9 border bg-secondary border-blue rounded-xl h-[60px] flex items-center px-6 justify-between">
       <h3>
         <span className="font-normal">DevTeam - </span>
-        <span>Nahim Hossain Shohan</span>
+        <span>{context.loggedInUser.name}</span>
       </h3>
 
       <p className="small-bold text-light">{context.role}</p>

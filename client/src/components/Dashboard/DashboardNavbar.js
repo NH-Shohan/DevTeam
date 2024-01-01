@@ -8,17 +8,18 @@ import Routes from '../Routes/Routes';
 function DashboardNavbar() {
   const context = useContext(AuthContext);
   const { logoutUser } = useAuthAPI();
+
   return (
     <div className="p-5 col-span-3 row-span-2 border border-blue rounded-xl flex flex-col items-center relative bg-secondary">
       <Image
         className="rounded-full border-gray-light border-2"
-        src="/user.svg"
+        src={context.loggedInUser.photo}
         alt="User Image"
         width={100}
         height={100}
         priority
       />
-      <p className="mt-4 bold">Nahim Hossain Shohan</p>
+      <p className="mt-4 bold">{context.loggedInUser.name}</p>
 
       <hr className="border border-blue w-full my-7" />
 
@@ -36,6 +37,7 @@ function DashboardNavbar() {
         <>
           <Routes path="/" name={'Home'} />
           <Routes path="/ApplyJob" name={'Apply Job'} />
+          <Routes path="/AppliedJob" name={'Applied Job'} />
           <Routes path="/Interviews" name={'Interviews'} />
           <Routes path="/PersonalInformation" name={'Personal Information'} />
         </>
