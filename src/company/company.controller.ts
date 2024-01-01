@@ -103,10 +103,10 @@ export class CompanyController {
   }
 
   // Jobs
-  @Delete('available-jobs/:id')
-  async deleteAvailableJob(@Param('id') id: number) {
-    return this.availableJobsService.deleteAvailableJob(id);
-  }
+  // @Delete('available-jobs/:id')
+  // async deleteAvailableJob(@Param('id') id: number) {
+  //   return this.availableJobsService.deleteAvailableJob(id);
+  // }
 
   // Jobs
   @Post('applied-job')
