@@ -63,7 +63,7 @@ export const AuthProvider = ({
             `/auth/get-user/${state.session?.email}`,
             {
               headers: {
-                Cookie: `connect.sid=${sessionCookie}`, // Replace with the correct cookie name and value
+                Cookie: `connect.sid=${sessionCookie}`,
                 'Content-Type': 'application/json',
               },
             },

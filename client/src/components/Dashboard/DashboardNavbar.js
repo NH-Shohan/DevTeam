@@ -13,12 +13,12 @@ function DashboardNavbar() {
     <div className="p-5 col-span-3 row-span-2 border border-blue rounded-xl flex flex-col items-center relative bg-secondary">
       {context.loggedInUser.photo &&
       context.loggedInUser.photo.startsWith('data:image/') ? (
-        <div className="relative rounded-full overflow-hidden h-10 w-10">
+        <div className="relative rounded-full overflow-hidden">
           <Image
             src={context.loggedInUser.photo}
             alt="User Image"
-            width={500}
-            height={500}
+            width={100}
+            height={100}
             priority
           />
         </div>
@@ -37,8 +37,7 @@ function DashboardNavbar() {
 
       {context.role === 'admin' ? (
         <>
-          <Routes path="/" name={'Home'} />
-          <Routes path="/CreateAdmin" name={'Create Admin'} />
+          <Routes path="/" name={'Create Admin'} />
           <Routes path="/AllAdmin" name={'All Admin'} />
           <Routes path="/AllCompany" name={'All Company'} />
           <Routes path="/AllDeveloper" name={'All Developer'} />
@@ -47,33 +46,29 @@ function DashboardNavbar() {
         </>
       ) : context.role === 'programmer' ? (
         <>
-          <Routes path="/" name={'Home'} />
-          <Routes path="/ApplyJob" name={'Apply Job'} />
+          <Routes path="/" name={'Apply Job'} />
           <Routes path="/AppliedJob" name={'Applied Job'} />
           <Routes path="/Interviews" name={'Interviews'} />
           <Routes path="/PersonalInformation" name={'Personal Information'} />
         </>
       ) : context.role === 'company' ? (
         <>
-          <Routes path="/" name={'Home'} />
+          <Routes path="/" name={'Create Job'} />
+          <Routes path="/ManageJob" name={'Manage Job'} />
           <Routes
             path="/CompanyPersonalInformation"
             name={'Personal Information'}
           />
-          <Routes path="/CreateJob" name={'Create Job'} />
-          <Routes path="/ManageJob" name={'Manage Job'} />
-          <Routes path="/AvailableJobs" name={'Available Jobs'} />
         </>
       ) : context.role === 'recruiter' ? (
         <>
-          <Routes path="/" name={'Home'} />
+          <Routes path="/" name={'See Interviews'} />
+          <Routes path="/SetInterview" name={'Set Interview'} />
+          <Routes path="/DeveloperStatus" name={'Developer Status'} />
           <Routes
             path="/RecruiterPersonalInformation"
             name={'Personal Information'}
           />
-          <Routes path="/SeeInterviews" name={'See Interviews'} />
-          <Routes path="/SetInterview" name={'Set Interview'} />
-          <Routes path="/DeveloperStatus" name={'Developer Status'} />
         </>
       ) : null}
 
