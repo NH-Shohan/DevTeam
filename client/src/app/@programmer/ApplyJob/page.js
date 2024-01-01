@@ -1,9 +1,8 @@
 'use client';
-// Interviews.jsx
 import Table from '@/components/Table/Table';
+import { AlertToast } from '@/components/Toast/AlertToast';
 import { AuthContext } from '@/context/AuthContext';
 import axios from 'axios';
-import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 
 const Interviews = () => {
@@ -46,7 +45,6 @@ const Interviews = () => {
   };
 
   const handleApply = async (jobId, companyEmail) => {
-    // Replace this with the actual logged-in user data
     console.log({ jobId, companyEmail, signedEmail });
     try {
       await axios.post('http://localhost:3333/company/applied-job', {
@@ -55,12 +53,11 @@ const Interviews = () => {
         companyEmail: companyEmail,
       });
 
-      // You can perform additional actions after successful application if needed
+      AlertToast('success');
       console.log('Application successful');
     } catch (error) {
-      alert('Already applied!');
+      AlertToast('error');
       console.error('Apply Error:', error.response || error);
-      // Handle the error or provide user feedback
     }
   };
 
