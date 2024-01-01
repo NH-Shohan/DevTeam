@@ -11,14 +11,26 @@ function DashboardNavbar() {
 
   return (
     <div className="p-5 col-span-3 row-span-2 border border-blue rounded-xl flex flex-col items-center relative bg-secondary">
-      <Image
-        className="rounded-full border-gray-light border-2"
-        src={context.loggedInUser.photo}
-        alt="User Image"
-        width={100}
-        height={100}
-        priority
-      />
+      {context.loggedInUser.photo &&
+      context.loggedInUser.photo.startsWith('data:image/') ? (
+        <div className="relative rounded-full overflow-hidden h-10 w-10">
+          <Image
+            src={context.loggedInUser.photo}
+            alt="User Image"
+            width={100}
+            height={100}
+            priority
+          />
+        </div>
+      ) : (
+        <Image
+          src={'./user.svg'}
+          alt="User Image"
+          width={100}
+          height={100}
+          priority
+        />
+      )}
       <p className="mt-4 bold">{context.loggedInUser.name}</p>
 
       <hr className="border border-blue w-full my-7" />
