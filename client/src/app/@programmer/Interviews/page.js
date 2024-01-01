@@ -30,49 +30,66 @@ const InterviewList = () => {
     <div className="container mx-auto mt-8">
       <h1 className="text-3xl font-bold mb-4">Interview Lists</h1>
       {interviewLists.map((interview, index) => (
-        <div key={interview.id} className="mb-8">
-          <h2 className="text-2xl font-semibold mb-2">
-            {index + 1}. Interview ID #{interview.id}
-          </h2>
-          <p>
-            <strong>Google Meet Link:</strong>{' '}
-            <a href={interview.googleMeetLink} target="_blank">
-              {interview.googleMeetLink}
-            </a>
-          </p>
-          <p>
-            <strong>Date & Time:</strong>{' '}
-            {new Date(interview.dateTime).toLocaleString()}
-          </p>
-          <p>
-            <strong>Recruiter:</strong> {interview.recruiter.name}
-          </p>
-          <p>
-            <strong>Recruiter's Expertise Skills:</strong>{' '}
-            {interview.recruiter.expertiseSkills.join(', ')}
-          </p>
-          <p>
-            <strong>Recruiter's Project Links:</strong>{' '}
-            {interview.recruiter.projectLinks.join(', ')}
-          </p>
-          <p>
-            <strong>Recruiter's LinkedIn Link:</strong>{' '}
-            {interview.recruiter.linkedInLink}
-          </p>
-          <p>
-            <strong>Company:</strong> {interview.company.name}
-          </p>
-          <p>
-            <strong>Company Owner:</strong> {interview.company.ownerName}
-          </p>
-          <p>
-            <strong>Company License No:</strong> {interview.company.licenseNo}
-          </p>
-          <p>
-            <strong>Company Owner NID:</strong> {interview.company.ownerNID}
-          </p>
-          {/* Add more details as needed */}
-        </div>
+        <table className="text-left">
+          <tr>
+            <th>Interview ID</th>
+            <td>{interview.id}</td>
+          </tr>
+          <hr />
+          <tr>
+            <th>Google Meet Link</th>
+            <td>
+              <a href={interview.googleMeetLink} target="_blank">
+                {interview.googleMeetLink}
+              </a>
+            </td>
+          </tr>
+          <hr />
+          <tr>
+            <th>Date & Time</th>
+            <td>{new Date(interview.dateTime).toLocaleString()}</td>
+          </tr>
+          <hr />
+          <tr>
+            <th>Recruiter</th>
+            <td>{interview.recruiter.name}</td>
+          </tr>
+          <hr />
+          <tr>
+            <th>Recruiter's Expertise Skills</th>
+            <td>{interview.recruiter.expertiseSkills.join(', ')}</td>
+          </tr>
+          <hr />
+          <tr>
+            <th>Recruiter's Project Links</th>
+            <td>{interview.recruiter.projectLinks.join(', ')}</td>
+          </tr>
+          <hr />
+          <tr>
+            <th>Recruiter's LinkedIn Link</th>
+            <td>{interview.recruiter.linkedInLink}</td>
+          </tr>
+          <hr />
+          <tr>
+            <th>Company</th>
+            <td>{interview.company.name}</td>
+          </tr>
+          <hr />
+          <tr>
+            <th>Company Owner</th>
+            <td>{interview.company.ownerName}</td>
+          </tr>
+          <hr />
+          <tr>
+            <th>Company License No</th>
+            <td>{interview.company.licenseNo}</td>
+          </tr>
+          <hr />
+          <tr>
+            <th>Company Owner NID</th>
+            <td>{interview.company.ownerNID}</td>
+          </tr>
+        </table>
       ))}
     </div>
   );

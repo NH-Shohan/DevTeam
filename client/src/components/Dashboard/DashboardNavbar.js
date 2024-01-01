@@ -17,8 +17,8 @@ function DashboardNavbar() {
           <Image
             src={context.loggedInUser.photo}
             alt="User Image"
-            width={100}
-            height={100}
+            width={500}
+            height={500}
             priority
           />
         </div>
