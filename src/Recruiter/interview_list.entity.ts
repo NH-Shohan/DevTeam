@@ -5,12 +5,14 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
   JoinColumn,
+  Unique,
 } from 'typeorm';
 import { AppliedJobsEntity } from './applied_jobs.entity';
 import { ProfileEntity } from 'src/programmer/profile/profile.entity';
 import { RecruiterEntity } from './recruiter.entity';
 import { CompanyEntity } from 'src/company/company.entity';
 @Entity('interview_list')
+@Unique(['appliedJob'])
 export class InterviewListEntity {
   @PrimaryGeneratedColumn()
   id: number;
