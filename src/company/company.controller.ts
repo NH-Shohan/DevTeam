@@ -147,4 +147,12 @@ export class CompanyController {
   async findAllAppliedJobs(): Promise<any[]> {
     return this.appliedJobsService.findAllAppliedJobs();
   }
+
+  // In your controller (company.controller.ts)
+  @Get('applied-job/:email')
+  async findAllAppliedJobsByEmail(
+    @Param('email') email: string,
+  ): Promise<any[]> {
+    return this.appliedJobsService.findAllAppliedJobsByEmail(email);
+  }
 }
