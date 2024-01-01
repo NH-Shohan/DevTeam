@@ -1,5 +1,6 @@
 'use client';
 
+import { AlertToast } from '@/components/Toast/AlertToast';
 import { AuthContext } from '@/context/AuthContext';
 import axios from 'axios';
 import { useContext, useEffect, useState } from 'react';
@@ -9,25 +10,23 @@ const SetInterview = () => {
 
   const { loggedInUser } = context;
 
-  const [recEmail, setRecEmail] = useState('');
-
+  const [appliedJobs, setAppliedJobs] = useState([]);
   const [interviewData, setInterviewData] = useState({
     appliedJob: '',
-    programmerData: '',
-    recruiter: '',
+    recruiter: loggedInUser.email,
     company: '',
     googleMeetLink: '',
     dateTime: '',
   });
 
-  const [appliedJobs, setAppliedJobs] = useState([]);
-
+  const [userEmail, setUserEmail] = useState();
   useEffect(() => {
+    setUserEmail(userEmail);
     // Fetch applied jobs data
     const fetchAppliedJobs = async () => {
       try {
         const response = await axios.get(
-          'http://localhost:3333/company/applied-job',
+          `http://localhost:3333/company/applied-job/${loggedInUser.email}`,
         );
         setAppliedJobs(response.data);
       } catch (error) {
@@ -36,19 +35,25 @@ const SetInterview = () => {
     };
 
     fetchAppliedJobs();
-  }, [loggedInUser.email]);
-  useEffect(() => {
-    if (loggedInUser.email) {
-      setInterviewData((prevData) => ({
-        ...prevData,
-        recruiter: loggedInUser.email,
-      }));
-    }
-  }, [loggedInUser.email]);
+  }, [loggedInUser.email, userEmail]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    console.log(e.target.value);
     setInterviewData((prevData) => ({ ...prevData, [name]: value }));
+  };
+  const handleInputChangeDropdown = (e) => {
+    const { name, value } = e.target;
+
+    const parsedData = JSON.parse(e.target.value);
+    console.log(e.target);
+    setInterviewData((prevData) => ({
+      ...prevData,
+      appliedJob: parsedData.id,
+      company: parsedData?.companyEmail,
+      recruiter: parsedData?.availableJob.interviewer.email,
+    }));
+    // e.target.value = parsedData.id;
   };
 
   const handleSubmit = async (e) => {
@@ -61,21 +66,19 @@ const SetInterview = () => {
         interviewData,
       );
 
-      console.log(interviewData);
-
       // Clear form after successful submission
-      // setInterviewData({
-      //   appliedJob: '',
-      //   programmerData: '',
-      //   recruiter: loggedInUser.email,
-      //   company: '',
-      //   googleMeetLink: '',
-      //   dateTime: '',
-      // });
-
+      setInterviewData({
+        appliedJob: '',
+        recruiter: loggedInUser.email,
+        company: '',
+        googleMeetLink: '',
+        dateTime: '',
+      });
+      AlertToast('success');
       // Optionally, you can display a success message or redirect to another page
     } catch (error) {
       console.error('Error setting interview:', error.response || error);
+      AlertToast(error);
       // Handle error as needed
     }
   };
@@ -89,37 +92,16 @@ const SetInterview = () => {
           <select
             className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light bg-primary focus:border-blue"
             name="appliedJob"
-            value={interviewData.appliedJob}
-            onChange={handleInputChange}
+            value={interviewData.appliedJob.companyEmail}
+            onChange={handleInputChangeDropdown}
             required
           >
             <option value="" disabled>
               Select an applied job
             </option>
             {appliedJobs.map((job) => (
-              <option key={job.id} value={job.companyEmail}>
+              <option key={job.id} value={JSON.stringify(job)}>
                 {job.companyEmail}
-              </option>
-            ))}
-          </select>
-        </label>
-        <br />
-
-        <label>
-          Programmer Data:
-          <select
-            className="w-full px-4 py-3 rounded-lg mb-4 outline-none border border-gray-light bg-primary focus:border-blue"
-            name="programmerData"
-            value={interviewData.programmerData}
-            onChange={handleInputChange}
-            required
-          >
-            <option value="" disabled>
-              Select a programmer
-            </option>
-            {appliedJobs.map((job) => (
-              <option key={job.id} value={job.programmer.email}>
-                {job.programmer.email}
               </option>
             ))}
           </select>
