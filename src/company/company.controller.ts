@@ -97,6 +97,12 @@ export class CompanyController {
   }
 
   // Jobs
+  @Get('available-jobs/:email')
+  async findAllAvailableJobsByEmail(@Param('email') email: string) {
+    return this.availableJobsService.findAllAvailableJobsByEmail(email);
+  }
+
+  // Jobs
   @Post('applied-job')
   async createAppliedJob(
     @Body() appliedJobData: Partial<AppliedJobsEntity>,

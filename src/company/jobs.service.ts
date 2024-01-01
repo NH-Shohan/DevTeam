@@ -48,6 +48,18 @@ export class AvailableJobsService {
       relations: ['company', 'interviewer', 'appliedJobs'],
     });
   }
+
+  async findAllAvailableJobsByEmail(
+    email: string,
+  ): Promise<AvailableJobsEntity[]> {
+    return this.availableJobsRepository
+      .createQueryBuilder('job')
+      .leftJoinAndSelect('job.company', 'company')
+      .leftJoinAndSelect('job.interviewer', 'interviewer')
+      .leftJoinAndSelect('job.appliedJobs', 'appliedJobs')
+      .where('company.email = :email OR interviewer.email = :email', { email })
+      .getMany();
+  }
 }
 
 // @Injectable()
