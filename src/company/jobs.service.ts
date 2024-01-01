@@ -60,20 +60,17 @@ export class AvailableJobsService {
       .where('company.email = :email OR interviewer.email = :email', { email })
       .getMany();
   }
+
+  // async deleteAvailableJob(id: number): Promise<void> {
+  //   // Check if the available job exists
+  //   const job = await this.availableJobsRepository.findOne({
+  //     where: { id: id },
+  //   });
+  //   if (!job) {
+  //     throw new NotFoundException(`Available job with ID ${id} not found`);
+  //   }
+
+  //   // Delete the available job
+  //   await this.availableJobsRepository.remove(job);
+  // }
 }
-
-// @Injectable()
-// export class AvailableJobsService {
-//   constructor(
-//     @InjectRepository(AvailableJobsEntity)
-//     private readonly availableJobsRepository: Repository<AvailableJobsEntity>,
-//   ) {}
-
-//   async createAvailableJobsEntity(
-//     availableJobsDTO: AvailableJobsEntity,
-//   ): Promise<AvailableJobsEntity> {
-//     const availableJobsEntity =
-//       this.availableJobsRepository.create(availableJobsDTO);
-//     return this.availableJobsRepository.save(availableJobsEntity);
-//   }
-// }
