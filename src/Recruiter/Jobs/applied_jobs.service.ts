@@ -1,36 +1,46 @@
 // applied-jobs.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AppliedJobsEntity } from '../applied_jobs.entity';
+import { ProfileEntity } from 'src/programmer/profile/profile.entity';
 
 @Injectable()
 export class AppliedJobsService {
   constructor(
     @InjectRepository(AppliedJobsEntity)
     private readonly appliedJobsRepository: Repository<AppliedJobsEntity>,
+    @InjectRepository(AppliedJobsEntity)
+    private readonly profileEntityRepository: Repository<ProfileEntity>,
   ) {}
 
   async createAppliedJob(
     appliedJobData: Partial<AppliedJobsEntity>,
   ): Promise<AppliedJobsEntity> {
-    const { availableJob, programmer } = appliedJobData;
+    try {
+      // // Check if an applied job with the same availableJob and programmer already exists
+      // const existingAppliedJob = await this.appliedJobsRepository.findOne({
+      //   where: {
+      //     availableJob: { id: appliedJobData.availableJob.id },
+      //     programmer: { email: appliedJobData.programmer.email },
+      //   },
+      // });
 
-    const existingAppliedJob = await this.appliedJobsRepository.findOne({
-      where: {
-        availableJob: { id: availableJob?.id }, // Assuming availableJob has an 'id' property
-        programmer: { email: programmer?.email }, // Assuming programmer has an 'email' property
-      },
-    });
-
-    if (existingAppliedJob) {
-      // Update existing applied job data
-      Object.assign(existingAppliedJob, appliedJobData);
-      return this.appliedJobsRepository.save(existingAppliedJob);
-    } else {
+      // if (existingAppliedJob) {
+      //   // Return existing applied job
+      //   console.log({ 'line 29': existingAppliedJob });
+      //   console.log({ 'line 30': appliedJobData });
+      //   throw new Error('Already Applied');
+      // } else {
       // Create a new applied job
       const newAppliedJob = this.appliedJobsRepository.create(appliedJobData);
+      console.log({ 'line 36': newAppliedJob });
       return this.appliedJobsRepository.save(newAppliedJob);
+      // }
+    } catch (error) {
+      // Handle errors or rethrow
+      console.error(error);
+      throw new Error('Failed to create or find applied job');
     }
   }
 

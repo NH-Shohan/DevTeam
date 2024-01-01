@@ -36,13 +36,13 @@ export class InterviewListService {
       //   { email: JSON.stringify(interviewListData.company) },
       // ]);
 
+      // console.log({ interviewListData });
       const interviewList = this.interviewListRepository.create({
         ...interviewListData,
         // appliedJob,
         // recruiter,
         // company,
       });
-      console.log(interviewList);
       return await this.interviewListRepository.save(interviewList);
     } catch (error) {
       console.log(error);

@@ -15,7 +15,7 @@ export class InterviewListEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => AppliedJobsEntity, (appliedJob) => appliedJob.companyEmail, {
+  @ManyToOne(() => AppliedJobsEntity, (appliedJob) => appliedJob.id, {
     eager: true,
   })
   appliedJob: AppliedJobsEntity;

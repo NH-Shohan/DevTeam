@@ -14,7 +14,7 @@ import {
 @Entity('applied_jobs')
 @Unique(['availableJob', 'programmer'])
 export class AppliedJobsEntity {
-  @Generated()
+  @PrimaryGeneratedColumn()
   id: number;
 
   @ManyToOne(() => AvailableJobsEntity, (availableJob) => availableJob.id)
@@ -23,7 +23,7 @@ export class AppliedJobsEntity {
   @ManyToOne(() => ProfileEntity, (programmer) => programmer.email)
   programmer: ProfileEntity;
 
-  @PrimaryColumn()
+  @Column()
   companyEmail: string;
 
   // Add other columns or relationships as needed

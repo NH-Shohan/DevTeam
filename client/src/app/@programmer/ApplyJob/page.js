@@ -58,6 +58,7 @@ const Interviews = () => {
       // You can perform additional actions after successful application if needed
       console.log('Application successful');
     } catch (error) {
+      alert('Already applied!');
       console.error('Apply Error:', error.response || error);
       // Handle the error or provide user feedback
     }
