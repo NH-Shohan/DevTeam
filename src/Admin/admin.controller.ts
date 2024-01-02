@@ -132,36 +132,6 @@ export class AdminController {
     return { msg: 'Deleted Successfully' };
   }
 
-  // Update Admin full profile
-  // @Put('update-admin/:id')
-  // @UsePipes(new ValidationPipe())
-  // updateProfile(
-  //   @Param('id', ParseIntPipe) id: number,
-
-  //   @Body() profileInfo: ValidateAdminProfile,
-  // ) {
-  //   const updated = this.appService.updateAdminEntity(id, profileInfo);
-  //   return {
-  //     updated,
-  //     msg: 'Successfully updated',
-  //   };
-  // }
-
-  // Update Admin property
-  // @Patch('update-admin-property/:id')
-  // // @UsePipes(new ValidationPipe())
-  // updateProfileProperty(
-  //   @Param('id', ParseIntPipe) id: number,
-
-  //   @Body() profileInfo: ValidateAdminProfile,
-  // ) {
-  //   const updated = this.appService.updateAdminEntity(id, profileInfo);
-  //   return {
-  //     updated,
-  //     msg: 'Successfully updated',
-  //   };
-  // }
-
   // Upload Admin Photo
   @Post('upload-admin-photo')
   @UseInterceptors(
@@ -240,33 +210,6 @@ export class AdminController {
 
     // return this.appService.createAdminEntity(result);
   }
-
-  // Show all Recruiters
-  // @Get('get-recruiters')
-  // getViewRecruiter(): any {
-  //   return this.recruiterService.getAllRecruiterEntitys();
-  // }
-
-  // Show all Recruiters
-
-  // @Patch('approve-recruiters/:id')
-  // @UsePipes(new ValidationPipe())
-  // approveRecruiters(
-  //   @Param('id', ParseIntPipe) id: number,
-  //   @Body() profile: AdminRecruiterEntity,
-  // ): any {
-  //   return this.recruiterService.updateRecruiterEntity(id, profile);
-  // }
-
-  // @Delete('reject-recruiters/:id')
-  // rejectRecruiters(@Param('id') id): any {
-  //   try {
-  //     this.recruiterService.deleteRecruiterEntity(id);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  //   return { msg: 'Deleted Successfully' };
-  // }
 
   @Get('companies')
   getCompanies(): any {

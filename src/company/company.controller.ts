@@ -97,6 +97,18 @@ export class CompanyController {
   }
 
   // Jobs
+  @Get('available-jobs/:email')
+  async findAllAvailableJobsByEmail(@Param('email') email: string) {
+    return this.availableJobsService.findAllAvailableJobsByEmail(email);
+  }
+
+  // Jobs
+  // @Delete('available-jobs/:id')
+  // async deleteAvailableJob(@Param('id') id: number) {
+  //   return this.availableJobsService.deleteAvailableJob(id);
+  // }
+
+  // Jobs
   @Post('applied-job')
   async createAppliedJob(
     @Body() appliedJobData: Partial<AppliedJobsEntity>,
@@ -146,5 +158,13 @@ export class CompanyController {
   @Get('applied-job')
   async findAllAppliedJobs(): Promise<any[]> {
     return this.appliedJobsService.findAllAppliedJobs();
+  }
+
+  // In your controller (company.controller.ts)
+  @Get('applied-job/:email')
+  async findAllAppliedJobsByEmail(
+    @Param('email') email: string,
+  ): Promise<any[]> {
+    return this.appliedJobsService.findAllAppliedJobsByEmail(email);
   }
 }

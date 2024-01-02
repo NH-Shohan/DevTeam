@@ -45,6 +45,7 @@ export class AuthController {
       res.cookie('connect.sid', session.cookie, {
         httpOnly: true,
         secure: false,
+        maxAge: 30000000,
       });
 
       // Return the session to the frontend

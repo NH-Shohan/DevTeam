@@ -1,4 +1,5 @@
 'use client';
+import { resizeImage } from '@/components/ResizeImage/ResizeImage';
 import axios from 'axios';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -296,14 +297,20 @@ const SignIn = () => {
     setShowPassword((prev) => !prev);
   };
 
-  const handlePhotoChange = (e) => {
+  const handlePhotoChange = async (e) => {
     const file = e.target.files[0];
 
     if (file) {
       const reader = new FileReader();
 
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
+      reader.onloadend = async () => {
+        try {
+          const resizedBase64 = await resizeImage(reader.result, 100, 100); // Set your desired dimensions
+          setPreviewImage(resizedBase64);
+        } catch (error) {
+          console.error('Error while resizing image:', error);
+          setPreviewImage(null);
+        }
       };
 
       reader.readAsDataURL(file);

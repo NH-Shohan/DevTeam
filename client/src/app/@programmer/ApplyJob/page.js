@@ -1,9 +1,8 @@
 'use client';
-// Interviews.jsx
 import Table from '@/components/Table/Table';
+import { AlertToast } from '@/components/Toast/AlertToast';
 import { AuthContext } from '@/context/AuthContext';
 import axios from 'axios';
-import Link from 'next/link';
 import { useContext, useEffect, useState } from 'react';
 
 const Interviews = () => {
@@ -46,7 +45,6 @@ const Interviews = () => {
   };
 
   const handleApply = async (jobId, companyEmail) => {
-    // Replace this with the actual logged-in user data
     console.log({ jobId, companyEmail, signedEmail });
     try {
       await axios.post('http://localhost:3333/company/applied-job', {
@@ -55,18 +53,18 @@ const Interviews = () => {
         companyEmail: companyEmail,
       });
 
-      // You can perform additional actions after successful application if needed
+      AlertToast('success');
       console.log('Application successful');
     } catch (error) {
-      alert('Already applied!');
+      AlertToast('error');
       console.error('Apply Error:', error.response || error);
-      // Handle the error or provide user feedback
     }
   };
 
   const columns = [
     { title: '#', key: 'id' },
     { title: 'Company', key: 'companyName' },
+    { title: 'Company Email', key: 'companyEmail' },
     { title: 'Job Description', key: 'jobDescription' },
     { title: 'Job Role', key: 'jobRole' },
     { title: 'Job Seat', key: 'jobSeat' },
@@ -76,37 +74,38 @@ const Interviews = () => {
     { title: 'Interviewer', key: 'interviewer' },
     { title: 'Actions', key: 'Actions' },
   ];
-
+  console.log({ searchResult });
   const data = searchResult
     ? [
         {
-          id: searchResult.id,
-          companyName: searchResult.company.name,
-          jobDescription: searchResult.jobDescription,
-          jobRole: searchResult.jobRole,
-          jobSeat: searchResult.jobSeat,
-          jobExpireDate: searchResult.jobExpireDate,
-          joiningDate: searchResult.joiningDate,
-          requiredSkills: searchResult.requiredSkills.join(', '),
-          interviewer: searchResult.interviewer
-            ? searchResult.interviewer.name
+          id: searchResult[0]?.id,
+          companyName: searchResult[0]?.company?.name || 'N/A',
+          companyEmail: searchResult[0]?.company?.email || 'N/A',
+          jobDescription: searchResult[0]?.jobDescription || 'N/A',
+          jobRole: searchResult[0]?.jobRole || 'N/A',
+          jobSeat: searchResult[0]?.jobSeat || 'N/A',
+          jobExpireDate: searchResult[0]?.jobExpireDate || 'N/A',
+          joiningDate: searchResult[0]?.joiningDate || 'N/A',
+          requiredSkills: searchResult[0]?.requiredSkills?.join(', ') || 'N/A',
+          interviewer: searchResult[0]?.interviewer
+            ? searchResult[0]?.interviewer.name || 'N/A'
             : 'N/A',
           Actions: (
             <>
               <button
                 onClick={() =>
-                  handleApply(searchResult.id, searchResult.company.email)
+                  handleApply(searchResult[0].id, searchResult[0].company.email)
                 }
-                className="bg-green text-white px-2 py-1 rounded"
+                className="bg-red text-white px-2 py-1 rounded"
               >
                 Apply
               </button>
-              <button
+              {/* <button
                 onClick={() => handleDelete(searchResult.id)}
                 className="bg-red text-white px-2 py-1 rounded"
               >
                 Delete
-              </button>
+              </button> */}
             </>
           ),
         },
@@ -114,13 +113,14 @@ const Interviews = () => {
     : jobs.map((job) => ({
         id: job.id,
         companyName: job.company.name,
+        companyEmail: job.company.email,
         jobDescription: job.jobDescription,
         jobRole: job.jobRole,
         jobSeat: job.jobSeat,
         jobExpireDate: job.jobExpireDate,
         joiningDate: job.joiningDate,
-        requiredSkills: job.requiredSkills.join(', '),
-        interviewer: job.interviewer ? job.interviewer.name : 'N/A',
+        requiredSkills: job.requiredSkills?.join(', '),
+        interviewer: job?.interviewer ? job.interviewer?.name : 'N/A',
         Actions: (
           <>
             <button

@@ -25,6 +25,4 @@ export class AppliedJobsEntity {
 
   @Column()
   companyEmail: string;
-
-  // Add other columns or relationships as needed
 }

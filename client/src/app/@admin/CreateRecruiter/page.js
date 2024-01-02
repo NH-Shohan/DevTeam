@@ -1,5 +1,6 @@
 // CreateRecruiter.jsx
 'use client';
+import { resizeImage } from '@/components/ResizeImage/ResizeImage';
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -119,12 +120,24 @@ const CreateRecruiter = ({ currentEmail }) => {
     formData.append('projectLinks', projectLinks);
     formData.append('linkedInLink', linkedInLink);
 
+    const submission = {
+      name: formData.get('name'),
+      username: formData.get('username'),
+      // email: formData.get('email'),
+      password: formData.get('password'),
+      imageName: formData.get('imageName'),
+      photo: formData.get('photo'),
+      expertiseSkills: formData.get('expertiseSkills'),
+      projectLinks: formData.get('projectLinks'),
+      linkedInLink: formData.get('linkedInLink'),
+    };
+
     try {
       if (currentEmail) {
         // Update operation
         const response = await axios.put(
           `http://localhost:3333/recruiter/update-recruiter/${currentEmail}`,
-          formData,
+          submission,
         );
         console.log('API Response:', response);
 
@@ -156,14 +169,20 @@ const CreateRecruiter = ({ currentEmail }) => {
     setShowPassword((prev) => !prev);
   };
 
-  const handlePhotoChange = (e) => {
+  const handlePhotoChange = async (e) => {
     const file = e.target.files[0];
 
     if (file) {
       const reader = new FileReader();
 
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
+      reader.onloadend = async () => {
+        try {
+          const resizedBase64 = await resizeImage(reader.result, 100, 100); // Set your desired dimensions
+          setPreviewImage(resizedBase64);
+        } catch (error) {
+          console.error('Error while resizing image:', error);
+          setPreviewImage(null);
+        }
       };
 
       reader.readAsDataURL(file);

@@ -22,19 +22,4 @@ export class UsersEntity {
 
   @Column()
   role: string;
-  //   @OneToOne(() => AdminEntity, { nullable: true })
-  //   @JoinColumn()
-  //   admin: AdminEntity;
-
-  //   @OneToOne(() => CompanyEntity, { nullable: true })
-  //   @JoinColumn()
-  //   company: CompanyEntity;
-
-  //   @OneToOne(() => RecruiterEntity, { nullable: true })
-  //   @JoinColumn()
-  //   recruiter: RecruiterEntity;
-
-  //   @OneToOne(() => ProfileEntity, { nullable: true })
-  //   @JoinColumn()
-  //   programmer: ProfileEntity;
 }

@@ -54,5 +54,39 @@ export class AppliedJobsService {
     });
   }
 
+  // In your service (applied_jobs.service.ts)
+  // applied_jobs.service.ts
+
+  async findAllAppliedJobsByEmail(email: string): Promise<any[]> {
+    try {
+      // Find applied jobs where the email matches either companyEmail or programmer email
+      const appliedJobs = await this.appliedJobsRepository.find({
+        where: [{ companyEmail: email }, { programmer: { email } }],
+        relations: [
+          'availableJob',
+          'programmer',
+          // Add other relations as needed
+        ],
+      });
+
+      // If the email is a recruiter email, also find applied jobs based on the availableJob's recruiter
+      const appliedJobsForRecruiter = await this.appliedJobsRepository
+        .createQueryBuilder('appliedJob')
+        .leftJoinAndSelect('appliedJob.availableJob', 'availableJob')
+        .leftJoinAndSelect('availableJob.interviewer', 'recruiter')
+        .where('recruiter.email = :email', { email })
+        .getMany();
+
+      // Merge the results from both queries
+      const allAppliedJobs = [...appliedJobs, ...appliedJobsForRecruiter];
+
+      return allAppliedJobs;
+    } catch (error) {
+      // Handle errors or rethrow
+      console.error(error);
+      throw new Error('Failed to fetch applied jobs');
+    }
+  }
+
   // Implement other methods as needed
 }

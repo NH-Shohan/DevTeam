@@ -1,4 +1,5 @@
 'use client';
+import { resizeImage } from '@/components/ResizeImage/ResizeImage';
 import axios from 'axios';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -140,9 +141,11 @@ const CreateAdmin = ({ currentEmail }) => {
     formData.append('password', data.password);
     formData.append('nationalId', data.nationalId);
     data.photo = previewImage;
-    formData.append('photo', data.photo);
+    formData.append('photo', previewImage);
     data.imageName = fileStore;
-    formData.append('imageName', data.imageName);
+    if (fileStore) {
+      formData.append('imageName', fileStore);
+    }
 
     // Append role and permissions as needed
     formData.append('role', data.role);
@@ -150,17 +153,30 @@ const CreateAdmin = ({ currentEmail }) => {
       formData.append('permissions', permission);
     });
 
+    const submission = {
+      name: formData.get('name'),
+      username: formData.get('username'),
+      // email: formData.get('email'),
+      password: formData.get('password'),
+      nationalId: formData.get('nationalId'),
+      photo: formData.get('photo'),
+      imageName: formData.get('imageName'),
+      role: formData.get('role'),
+      permissions: Array.from(formData.getAll('permissions')),
+    };
+
     try {
       if (currentEmail) {
         // Update operation
         const response = await axios.put(
           `http://localhost:3333/admin/update-admin/${currentEmail}`,
-          formData,
+          submission,
         );
         console.log('API Response:', response);
 
         notify('success');
       } else {
+        console.log({ formData });
         const response = await axios.post(
           'http://localhost:3333/admin/create-admin',
           formData,
@@ -187,14 +203,20 @@ const CreateAdmin = ({ currentEmail }) => {
     setShowPassword((prev) => !prev);
   };
 
-  const handlePhotoChange = (e) => {
+  const handlePhotoChange = async (e) => {
     const file = e.target.files[0];
 
     if (file) {
       const reader = new FileReader();
 
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
+      reader.onloadend = async () => {
+        try {
+          const resizedBase64 = await resizeImage(reader.result, 100, 100); // Set your desired dimensions
+          setPreviewImage(resizedBase64);
+        } catch (error) {
+          console.error('Error while resizing image:', error);
+          setPreviewImage(null);
+        }
       };
 
       reader.readAsDataURL(file);
@@ -202,6 +224,22 @@ const CreateAdmin = ({ currentEmail }) => {
       setPreviewImage(null);
     }
   };
+
+  // const handlePhotoChange = (e) => {
+  //   const file = e.target.files[0];
+
+  //   if (file) {
+  //     const reader = new FileReader();
+
+  //     reader.onloadend = () => {
+  //       setPreviewImage(reader.result);
+  //     };
+
+  //     reader.readAsDataURL(file);
+  //   } else {
+  //     setPreviewImage(null);
+  //   }
+  // };
 
   return (
     <div className="flex items-center justify-center">
