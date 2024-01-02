@@ -38,6 +38,7 @@ function DashboardNavbar() {
       {context.role === 'admin' ? (
         <>
           <Routes path="/" name={'Create Admin'} />
+          <Routes path="/CreateAdmin" name={'Create Admin'} />
           <Routes path="/AllAdmin" name={'All Admin'} />
           <Routes path="/AllCompany" name={'All Company'} />
           <Routes path="/AllDeveloper" name={'All Developer'} />
@@ -46,14 +47,16 @@ function DashboardNavbar() {
         </>
       ) : context.role === 'programmer' ? (
         <>
-          <Routes path="/" name={'Apply Job'} />
+          {/* <Routes path="/" name={'Apply Job'} /> */}
+          <Routes path="/ApplyJob" name={'Apply Job'} />
           <Routes path="/AppliedJob" name={'Applied Job'} />
           <Routes path="/Interviews" name={'Interviews'} />
           <Routes path="/PersonalInformation" name={'Personal Information'} />
         </>
       ) : context.role === 'company' ? (
         <>
-          <Routes path="/" name={'Create Job'} />
+          {/* <Routes path="/" name={'Create Job'} /> */}
+          <Routes path="/CreateJob" name={'Create Job'} />
           <Routes path="/ManageJob" name={'Manage Job'} />
           <Routes
             path="/CompanyPersonalInformation"
