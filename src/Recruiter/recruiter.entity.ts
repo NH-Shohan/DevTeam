@@ -50,23 +50,6 @@ export class RecruiterEntity {
   user: UsersEntity;
 }
 
-// @Entity('Interview_Unfinished')
-// export class InterviewEntityError {
-//   @PrimaryGeneratedColumn()
-//   id: number;
-//   @OneToOne(() => ProfileEntity, (candidateProfile) => candidateProfile.email, {
-//     cascade: true,
-//   })
-//   @JoinColumn()
-//   candidateProfile: ProfileEntity;
-
-//   @Column()
-//   date: string;
-
-//   @Column()
-//   googleMeetLink: string;
-// }
-
 @Entity('Interview')
 export class InterviewEntity {
   @PrimaryGeneratedColumn()
