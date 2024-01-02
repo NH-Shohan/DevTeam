@@ -62,7 +62,7 @@ function DashboardNavbar() {
         </>
       ) : context.role === 'recruiter' ? (
         <>
-          <Routes path="/" name={'See Interviews'} />
+          <Routes path="/SeeInterviews" name={'See Interviews'} />
           <Routes path="/SetInterview" name={'Set Interview'} />
           <Routes path="/DeveloperStatus" name={'Developer Status'} />
           <Routes
